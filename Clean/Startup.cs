@@ -36,10 +36,10 @@ namespace Clean
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clean", Version = "v1" });
             });
 
-            services.AddHttpsRedirection(options =>
-            {
-                options.HttpsPort = 5001;
-            });
+            //services.AddHttpsRedirection(options =>
+            //{
+            //    options.HttpsPort = 5001;
+            //});
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
