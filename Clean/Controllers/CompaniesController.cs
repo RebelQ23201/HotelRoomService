@@ -10,7 +10,7 @@ using Clean.Model;
 
 namespace Clean.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/companies")]
     [ApiController]
     public class CompaniesController : Controller
     {
@@ -29,7 +29,7 @@ namespace Clean.Controllers
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(long id)
+        public async Task<ActionResult<Company>> GetCompany(int id)
         {
             var todoItem = await _context.Company.FindAsync(id);
 

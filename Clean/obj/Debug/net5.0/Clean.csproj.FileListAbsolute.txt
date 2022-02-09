@@ -135,16 +135,3 @@ D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.pdb
 D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.genruntimeconfig.cache
 D:\FPT\Spring_2022\SWD391\Clean\Clean\bin\Debug\net5.0\Clean.Views.dll
 D:\FPT\Spring_2022\SWD391\Clean\Clean\bin\Debug\net5.0\Clean.Views.pdb
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.RazorAssemblyInfo.cache
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.RazorAssemblyInfo.cs
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.TagHelpers.input.cache
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.TagHelpers.output.cache
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.RazorCoreGenerate.cache
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Razor\Views\Companies\Create.cshtml.g.cs
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Razor\Views\Companies\Delete.cshtml.g.cs
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Razor\Views\Companies\Details.cshtml.g.cs
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Razor\Views\Companies\Edit.cshtml.g.cs
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Razor\Views\Companies\Index.cshtml.g.cs
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.RazorTargetAssemblyInfo.cs
-D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.Views.pdb
