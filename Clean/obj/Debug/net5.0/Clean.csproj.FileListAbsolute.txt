@@ -134,4 +134,3 @@ D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\ref\Clean.dll
 D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.pdb
 D:\FPT\Spring_2022\SWD391\Clean\Clean\obj\Debug\net5.0\Clean.genruntimeconfig.cache
 D:\FPT\Spring_2022\SWD391\Clean\Clean\bin\Debug\net5.0\Clean.Views.dll
-D:\FPT\Spring_2022\SWD391\Clean\Clean\bin\Debug\net5.0\Clean.Views.pdb

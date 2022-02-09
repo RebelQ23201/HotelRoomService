@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Clean.Data;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Clean
 {
@@ -35,6 +36,12 @@ namespace Clean
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clean", Version = "v1" });
             });
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
             services.AddDbContext<CleanContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("CleanContext")));
         }
@@ -48,6 +55,8 @@ namespace Clean
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Clean v1"));
             }
+
+            app.UseForwardedHeaders();
 
             app.UseHttpsRedirection();
 
