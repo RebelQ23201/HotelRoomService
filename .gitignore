@@ -395,4 +395,15 @@ FodyWeavers.xsd
 *.msp
 
 # JetBrains Rider
+
+
+#Manual inserted
 *.sln.imls
+Clean/obj/project.nuget.cache
+Clean/obj/project.assets.json
+Clean/obj/Debug/net5.0/Clean.GeneratedMSBuildEditorConfig.editorconfig
+Clean/obj/Debug/net5.0/Clean.assets.cache
+Clean/obj/Clean.csproj.nuget.g.props
+Clean/obj/Clean.csproj.nuget.dgspec.json
+.vs/Clean/v16/.suo
+.vs/Clean/DesignTimeBuild/.dtbcache.v2
