@@ -14,6 +14,7 @@ namespace Clean.Controllers
     [ApiController]
     public class CompaniesController : Controller
     {
+        /*
         private readonly CleanContext _context;
 
         public CompaniesController(CleanContext context)
@@ -104,6 +105,7 @@ namespace Clean.Controllers
         {
             return _context.Company.Any(e => e.CompanyId == id);
         }
+        */
     }
 }
 
