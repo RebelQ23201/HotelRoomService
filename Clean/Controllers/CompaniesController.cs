@@ -5,40 +5,48 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Clean.Data;
 using Clean.Model;
+using Clean.DataContext;
+using Clean.Mapper;
+using AutoMapper;
 
 namespace Clean.Controllers
 {
-    [Route("api/companies")]
+    [Route("api/Company")]
     [ApiController]
     public class CompaniesController : Controller
     {
-        private readonly CleanContext _context;
+        private readonly CleanDBContext _context;
+        private readonly IMapper mappper;
 
-        public CompaniesController(CleanContext context)
+        public CompaniesController(CleanDBContext context, IMapper mappper)
         {
             _context = context;
+            this.mappper = mappper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
+        public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompanies()
         {
-            return await _context.Company.ToListAsync();
+            List<Company> companies = await _context.Companies.ToListAsync();
+            List<CompanyModel> models = mappper.Map<List<CompanyModel>>(companies);
+            return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(int id)
+        public async Task<ActionResult<CompanyModel>> GetCompany(int id)
         {
-            var todoItem = await _context.Company.FindAsync(id);
+            var company = await _context.Companies.FindAsync(id);
 
-            if (todoItem == null)
+            if (company == null)
             {
                 return NotFound();
             }
 
-            return todoItem;
+            CompanyModel model = mappper.Map<CompanyModel>(company);
+
+            return model;
         }
 
         // PUT: api/TodoItems/5
@@ -75,9 +83,9 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Company>> PostCompany(Company company)
+        public async Task<ActionResult<CompanyModel>> PostCompany(Company company)
         {
-            _context.Company.Add(company);
+            _context.Companies.Add(company);
             await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
@@ -88,13 +96,13 @@ namespace Clean.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(long id)
         {
-            var company = await _context.Company.FindAsync(id);
+            var company = await _context.Companies.FindAsync(id);
             if (company == null)
             {
                 return NotFound();
             }
 
-            _context.Company.Remove(company);
+            _context.Companies.Remove(company);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -102,7 +110,7 @@ namespace Clean.Controllers
 
         private bool CompanyExists(int id)
         {
-            return _context.Company.Any(e => e.CompanyId == id);
+            return _context.Companies.Any(e => e.CompanyId == id);
         }
     }
 }
