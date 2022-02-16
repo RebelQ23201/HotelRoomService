@@ -9,6 +9,8 @@ using Clean.Model;
 using Clean.DataContext;
 using Clean.Mapper;
 using AutoMapper;
+using Clean.Service;
+using Clean.Repository;
 
 namespace Clean.Controllers
 {
@@ -18,9 +20,13 @@ namespace Clean.Controllers
     {
         private readonly CleanDBContext _context;
         private readonly IMapper mappper;
+        private CompanyService companyService;
+        private CompanyRepository companyRepository;
 
         public CompaniesController(CleanDBContext context, IMapper mappper)
         {
+            companyRepository = new CompanyRepository();
+            companyService = new CompanyService();
             _context = context;
             this.mappper = mappper;
         }
@@ -28,24 +34,17 @@ namespace Clean.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompanies()
         {
-            List<Company> companies = await _context.Companies.ToListAsync();
-            List<CompanyModel> models = mappper.Map<List<CompanyModel>>(companies);
-            return models;
+            var companies = await companyService.getCompanies();
+            List<CompanyModel> model = mappper.Map<List<CompanyModel>>(companies);
+            return model;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CompanyModel>> GetCompany(int id)
+        public async Task<ActionResult<CompanyModel>> GetCompanyById(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
-
-            if (company == null)
-            {
-                return NotFound();
-            }
-
+            var company = await companyService.GetCompany(id);
             CompanyModel model = mappper.Map<CompanyModel>(company);
-
             return model;
         }
 

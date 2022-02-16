@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Clean.DataContext;
+using Clean.Model;
 using Clean.Service;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,28 +16,26 @@ namespace Clean.Repository
         private readonly CleanDBContext _context;
         private readonly IMapper mappper;
 
-        public CompanyService()
+        public CompanyRepository()
         {
+            _context = new CleanDBContext();
         }
 
-        public CompanyService(CleanDBContext context, IMapper mappper)
+        public CompanyRepository(CleanDBContext context, IMapper mappper)
         {
             _context = context;
             this.mappper = mappper;
         }
 
-        public CompanyModel GetCompany(int id)
+        public async Task<IEnumerable<Company>> GetCompanies()
         {
-            var company = _context.Companies.FindAsync(id);
-
-            if (company == null)
-            {
-                return null;
-            }
-
-            CompanyModel model = mappper.Map<CompanyModel>(company);
-
-            return model;
+            List<Company> companies = await _context.Companies.ToListAsync();
+            return companies;
+        }
+        public async Task<Company> GetCompanyAsync(int id)
+        {
+            var company = await _context.Companies.FindAsync(id);
+            return company;
         }
     }
 }

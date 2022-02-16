@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Clean.DataContext;
 using Clean.Model;
+using Clean.Repository;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,29 +14,21 @@ namespace Clean.Service
     {
         private readonly CleanDBContext _context;
         private readonly IMapper mappper;
-
+        private readonly CompanyRepository companyRepo;
         public CompanyService()
         {
+            companyRepo = new CompanyRepository();
         }
 
-        public CompanyService(CleanDBContext context, IMapper mappper)
+        public async Task<IEnumerable<Company>> getCompanies()
         {
-            _context = context;
-            this.mappper = mappper;
+            var companies = await companyRepo.GetCompanies();
+            return companies;
         }
-
-        public CompanyModel GetCompany(int id)
+        public async Task<Company> GetCompany(int id)
         {
-            var company = _context.Companies.FindAsync(id);
-
-            if (company == null)
-            {
-                return null;
-            }
-
-            CompanyModel model = mappper.Map<CompanyModel>(company);
-
-            return model;
+            var company = await companyRepo.GetCompanyAsync(id);
+            return company;
         }
     }
 }
