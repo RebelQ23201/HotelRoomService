@@ -18,16 +18,12 @@ namespace Clean.Controllers
     [ApiController]
     public class CompaniesController : Controller
     {
-        private readonly CleanDBContext _context;
         private readonly IMapper mappper;
         private CompanyService companyService;
-        private CompanyRepository companyRepository;
 
-        public CompaniesController(CleanDBContext context, IMapper mappper)
+        public CompaniesController(IMapper mappper)
         {
-            companyRepository = new CompanyRepository();
             companyService = new CompanyService();
-            _context = context;
             this.mappper = mappper;
         }
 
@@ -51,65 +47,29 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(int id, Company company)
+        public async Task<ActionResult<string>> EditCompany(int id, Company company)
         {
-            if (id != company.CompanyId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(company).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompanyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var message = await companyService.editCompany(id, company);
+            return message;
         }
 
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CompanyModel>> PostCompany(Company company)
+        public async Task<ActionResult<CompanyModel>> AddCompany(Company company)
         {
-            _context.Companies.Add(company);
-            await _context.SaveChangesAsync();
+            var companyAdded = await companyService.addCompany(company);
+            CompanyModel model = mappper.Map<CompanyModel>(company);
 
-            //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            return CreatedAtAction(nameof(GetCompanies), new { id = company.CompanyId}, company);
+            return model;
         }
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoItem(long id)
+        public async Task<string> DeleteTodoItem(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool CompanyExists(int id)
-        {
-            return _context.Companies.Any(e => e.CompanyId == id);
+            var message = await companyService.deleteCompany(id);
+            return message;
         }
     }
 }

@@ -30,5 +30,23 @@ namespace Clean.Service
             var company = await companyRepo.GetCompanyAsync(id);
             return company;
         }
+
+        public async Task<string> editCompany(int id, Company company)
+        {
+            var message = await companyRepo.editCompany(id, company);
+            return message;
+        }
+
+        public async Task<Company> addCompany (Company company)
+        {
+            var companyAdded = await companyRepo.addCompany(company);
+            return companyAdded;
+        }
+
+        public async Task<string> deleteCompany(int id)
+        {
+            var message = await companyRepo.deleteCompany(id);
+            return message;
+        }
     }
 }
