@@ -18,7 +18,7 @@ namespace CleanService.DBContext
         public string Name { get; set; }
 
         public virtual Hotel Hotel { get; set; }
-        public virtual SystemRoomType1 SystemRoomType { get; set; }
+        public virtual SystemRoomType SystemRoomType { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
     }
 }

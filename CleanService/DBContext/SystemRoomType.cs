@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace CleanService.DBContext
 {
-    public partial class SystemRoomType1
+    public partial class SystemRoomType
     {
-        public SystemRoomType1()
+        public SystemRoomType()
         {
             RoomTypes = new HashSet<RoomType>();
         }

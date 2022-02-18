@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Clean.Model;
-using Clean.DataContext;
-using Clean.Mapper;
 using AutoMapper;
+using CleanService.IService;
+using CleanService.Service;
+using CleanService.DBContext;
+using System.Linq.Expressions;
 
 namespace Clean.Controllers
 {
@@ -16,19 +18,19 @@ namespace Clean.Controllers
     [ApiController]
     public class CompaniesController : Controller
     {
-        private readonly CleanDBContext _context;
+        private readonly ICompanyService companyService;
         private readonly IMapper mappper;
 
-        public CompaniesController(CleanDBContext context, IMapper mappper)
+        public CompaniesController(ICompanyService companyService, IMapper mappper)
         {
-            _context = context;
+            this.companyService = companyService;
             this.mappper = mappper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompanies()
+        public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompanies([FromQuery] Expression<Func<TagBuilder, bool>>? expression)
         {
-            List<Company> companies = await _context.Companies.ToListAsync();
+            List<Company> companies = (await companyService.GetList()).ToList();
             List<CompanyModel> models = mappper.Map<List<CompanyModel>>(companies);
             return models;
         }
@@ -37,7 +39,7 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CompanyModel>> GetCompany(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
+            Company company =  await companyService.GetById(id);
 
             if (company == null)
             {
@@ -59,22 +61,27 @@ namespace Clean.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(company).State = EntityState.Modified;
+            //_context.Entry(company).State = EntityState.Modified;
 
-            try
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!CompanyExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+
+            if (!await companyService.Update(company))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompanyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -85,8 +92,8 @@ namespace Clean.Controllers
         [HttpPost]
         public async Task<ActionResult<CompanyModel>> PostCompany(Company company)
         {
-            _context.Companies.Add(company);
-            await _context.SaveChangesAsync();
+            //_context.Companies.Add(company);
+            //await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
             return CreatedAtAction(nameof(GetCompanies), new { id = company.CompanyId}, company);
@@ -94,24 +101,28 @@ namespace Clean.Controllers
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoItem(long id)
+        public async Task<IActionResult> DeleteTodoItem(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
-            if (company == null)
+            //var company = await _context.Companies.FindAsync(id);
+            //if (company == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //_context.Companies.Remove(company);
+            //await _context.SaveChangesAsync();
+            if(!await companyService.Delete(id))
             {
                 return NotFound();
             }
 
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
-        private bool CompanyExists(int id)
-        {
-            return _context.Companies.Any(e => e.CompanyId == id);
-        }
+        //private bool CompanyExists(int id)
+        //{
+        //    return _context.Companies.Any(e => e.CompanyId == id);
+        //}
     }
 }
 

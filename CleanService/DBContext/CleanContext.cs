@@ -27,7 +27,7 @@ namespace CleanService.DBContext
         public virtual DbSet<RoomService> RoomServices { get; set; }
         public virtual DbSet<RoomType> RoomTypes { get; set; }
         public virtual DbSet<Service> Services { get; set; }
-        public virtual DbSet<SystemRoomType1> SystemRoomType1s { get; set; }
+        public virtual DbSet<SystemRoomType> SystemRoomType1s { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -271,7 +271,7 @@ namespace CleanService.DBContext
                     .HasConstraintName("FK_Service_Company");
             });
 
-            modelBuilder.Entity<SystemRoomType1>(entity =>
+            modelBuilder.Entity<SystemRoomType>(entity =>
             {
                 entity.HasKey(e => e.SystemRoomTypeId);
 

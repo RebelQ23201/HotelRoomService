@@ -1,4 +1,6 @@
 ﻿using CleanService.DBContext;
+using CleanService.IService;
+using CleanService.Service;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -9,43 +11,48 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    class CompanyService : IService<Company>
+    public class CompanyService : ICompanyService
     {
-
-        public IEnumerable<Company> GetList()
+        public async Task<IEnumerable<Company>> GetList()
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = GetById(id);
-                if (company == null)
-                {
-                    return false;
-                }
-                context.Companies.Remove(company);
-                context.SaveChanges();
-                companyList = InitList();
-                return true;
+                IEnumerable<Company> list = await context.Companies.ToArrayAsync();
+                return list;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
-            return new List;
+            return new List<Company>();
         }
-        public bool Delete(int id)
+        public async Task<Company> GetById(int id)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = GetById(id);
+                Company company = await context.Companies.FindAsync(id);
+                return company;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return null;
+        }
+        public async Task<bool> Delete(int id)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+                Company company = await context.Companies.FindAsync(id);
                 if (company == null)
                 {
                     return false;
                 }
                 context.Companies.Remove(company);
                 context.SaveChanges();
-                companyList = InitList();
                 return true;
             }
             catch (Exception e)
@@ -55,21 +62,20 @@ namespace CleanService.Service
             return false;
         }
 
-        public Company GetById(int id)=> companyList.SingleOrDefault(c => c.CompanyId == id);
 
-        public bool Update(Company c)
+
+        public async Task<bool> Update(Company c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = GetById(c.CompanyId);
+                Company company = await GetById(c.CompanyId);
                 if (company == null)
                 {
                     return false;
                 }
-                context.Entry<Company>(company).State = EntityState.Modified;
+                context.Entry(company).State = EntityState.Modified;
                 context.SaveChanges();
-                companyList = InitList();
                 return true;
             }
             catch (Exception e)

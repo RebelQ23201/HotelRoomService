@@ -1,5 +1,5 @@
-﻿using Clean.DataContext;
-using Clean.Model;
+﻿using Clean.Model;
+using CleanService.DBContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,27 @@ namespace Clean.Mapper
         {
             CreateMap<CompanyModel, Company>()
                 .ReverseMap();
+            CreateMap<EmployeeModel, Employee>()
+                .ReverseMap();
+            CreateMap<HotelModel, Hotel>()
+                .ReverseMap();
+            CreateMap<OrderDetailModel, OrderDetail>()
+                            .ReverseMap();
+            CreateMap<OrderModel, Order>()
+                            .ReverseMap();
+            CreateMap<RoomModel, Room>()
+                            .ReverseMap();
+            CreateMap<RoomOrderModel, RoomOrder>()
+                            .ReverseMap();
+            CreateMap<RoomServiceModel, RoomService>()
+                            .ReverseMap();
+            CreateMap<RoomTypeModel, RoomType>()
+                            .ReverseMap();
+            CreateMap<ServiceModel, Service>()
+                            .ReverseMap();
+            CreateMap<SystemRoomTypeModel, SystemRoomType>()
+                            .ReverseMap();
+
         }
     }
 }

@@ -11,6 +11,6 @@ namespace CleanService.DBContext
         public int? SystemRoomTypeId { get; set; }
 
         public virtual Service Service { get; set; }
-        public virtual SystemRoomType1 SystemRoomType { get; set; }
+        public virtual SystemRoomType SystemRoomType { get; set; }
     }
 }

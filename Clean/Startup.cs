@@ -11,9 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Clean.DataContext;
 using Clean.Mapper;
+using CleanService.Service;
+using CleanService.IService;
 
 namespace Clean
 {
@@ -36,10 +36,11 @@ namespace Clean
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clean", Version = "v1" });
             });
 
-            services.AddDbContext<CleanDBContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("CleanContext")));
+            //services.AddDbContext<CleanDBContext>(options =>
+            //        options.UseSqlServer(Configuration.GetConnectionString("CleanContext")));
 
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
+            services.AddScoped(typeof(ICompanyService), typeof(CompanyService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
