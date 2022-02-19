@@ -11,6 +11,7 @@ using CleanService.IService;
 using CleanService.Service;
 using CleanService.DBContext;
 using System.Linq.Expressions;
+using Clean.Util;
 
 namespace Clean.Controllers
 {
@@ -18,26 +19,50 @@ namespace Clean.Controllers
     [ApiController]
     public class CompaniesController : Controller
     {
-        private readonly ICompanyService companyService;
+        private readonly IBaseService<Company> companyService;
+        //private readonly ICompanyService companyService;
         private readonly IMapper mappper;
 
-        public CompaniesController(ICompanyService companyService, IMapper mappper)
+        //public CompaniesController(IBaseService<Company> companyService, IMapper mappper)
+        public CompaniesController(IBaseService<Company> companyService, IMapper mappper)
         {
             this.companyService = companyService;
             this.mappper = mappper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompanies([FromQuery] Expression<Func<TagBuilder, bool>>? expression)
+        public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompanies(
+            [FromQuery] int? id, string name, string addr, string phone, string email)
         {
-            List<Company> companies = (await companyService.GetList()).ToList();
+            Expression<Func<Company, bool>> filters = c => true;
+            if (id != null)
+            {
+                filters = filters.AndAlso(c => c.CompanyId == id);
+            }
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                filters = filters.AndAlso(c => c.Name == name);
+            }
+            if (!string.IsNullOrWhiteSpace(addr))
+            {
+                filters = filters.AndAlso(c => c.Address == addr);
+            }
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                filters = filters.AndAlso(c => c.Phone == phone);
+            }
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                filters.AndAlso(c => c.Email == email);
+            }
+            List<Company> companies = (await companyService.GetList(filters)).ToList();
             List<CompanyModel> models = mappper.Map<List<CompanyModel>>(companies);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CompanyModel>> GetCompany(int id)
+        public async Task<ActionResult<CompanyModel>> GetCompany(int id) 
         {
             Company company =  await companyService.GetById(id);
 
@@ -96,6 +121,10 @@ namespace Clean.Controllers
             //await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
+            if(!await companyService.Create(company))
+            {
+                return NotFound();
+            }
             return CreatedAtAction(nameof(GetCompanies), new { id = company.CompanyId}, company);
         }
 

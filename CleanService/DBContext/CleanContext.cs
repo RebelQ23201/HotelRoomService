@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -33,8 +35,12 @@ namespace CleanService.DBContext
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=DESKTOP-596ASLR\\MSSQLSERVER2019; database=Clean; uid=sa; pwd=123456");
+                IConfiguration config = new ConfigurationBuilder()
+                                    .SetBasePath(Directory.GetCurrentDirectory())
+                                    .AddJsonFile("appsettings.json", true, true)
+                                    .Build();
+                string connectionString = config["ConnectionStrings:CleanContext"];
+                optionsBuilder.UseSqlServer(connectionString);
             }
         }
 

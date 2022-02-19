@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Clean.Mapper;
 using CleanService.Service;
 using CleanService.IService;
+using CleanService.DBContext;
 
 namespace Clean
 {
@@ -40,7 +41,8 @@ namespace Clean
             //        options.UseSqlServer(Configuration.GetConnectionString("CleanContext")));
 
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
-            services.AddScoped(typeof(ICompanyService), typeof(CompanyService));
+            services.AddSingleton(typeof(IBaseService<Company>), typeof(CompanyService));
+            //services.AddScoped(typeof(ICompanyService), typeof(CompanyService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

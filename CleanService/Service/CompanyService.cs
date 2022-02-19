@@ -6,19 +6,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class CompanyService : ICompanyService
+    public class CompanyService : IBaseService<Company>
     {
-        public async Task<IEnumerable<Company>> GetList()
+        public async Task<IEnumerable<Company>> GetList(Expression<Func<Company, bool>> query)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Company> list = await context.Companies.ToArrayAsync();
+                IEnumerable<Company> list = await context.Companies.Where(query).ToArrayAsync();
                 return list;
             }
             catch (Exception e)
@@ -69,12 +70,35 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await GetById(c.CompanyId);
+                Company company = await context.Companies.FindAsync(c.CompanyId);
                 if (company == null)
                 {
                     return false;
                 }
                 context.Entry(company).State = EntityState.Modified;
+                context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return false;
+        }
+
+
+
+        public async Task<bool> Create(Company c)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+                Company company = await context.Companies.FindAsync(c.CompanyId);
+                if (company != null)
+                {
+                    return false;
+                }
+                context.Companies.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }
