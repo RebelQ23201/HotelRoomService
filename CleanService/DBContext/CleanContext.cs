@@ -1,18 +1,20 @@
 ﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
-namespace Clean.DataContext
+namespace CleanService.DBContext
 {
-    public partial class CleanDBContext : DbContext
+    public partial class CleanContext : DbContext
     {
-        public CleanDBContext()
+        public CleanContext()
         {
         }
 
-        public CleanDBContext(DbContextOptions<CleanDBContext> options)
+        public CleanContext(DbContextOptions<CleanContext> options)
             : base(options)
         {
         }
@@ -27,14 +29,18 @@ namespace Clean.DataContext
         public virtual DbSet<RoomService> RoomServices { get; set; }
         public virtual DbSet<RoomType> RoomTypes { get; set; }
         public virtual DbSet<Service> Services { get; set; }
-        public virtual DbSet<SystemRoomType1> SystemRoomType1s { get; set; }
+        public virtual DbSet<SystemRoomType> SystemRoomType1s { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=(local); database=Clean; uid=Quang; pwd=230201");
+                IConfiguration config = new ConfigurationBuilder()
+                                    .SetBasePath(Directory.GetCurrentDirectory())
+                                    .AddJsonFile("appsettings.json", true, true)
+                                    .Build();
+                string connectionString = config["ConnectionStrings:CleanContext"];
+                optionsBuilder.UseSqlServer(connectionString);
             }
         }
 
@@ -271,7 +277,7 @@ namespace Clean.DataContext
                     .HasConstraintName("FK_Service_Company");
             });
 
-            modelBuilder.Entity<SystemRoomType1>(entity =>
+            modelBuilder.Entity<SystemRoomType>(entity =>
             {
                 entity.HasKey(e => e.SystemRoomTypeId);
 

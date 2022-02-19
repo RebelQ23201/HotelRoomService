@@ -3,22 +3,25 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Clean.DataContext
+namespace CleanService.DBContext
 {
-    public partial class Room
+    public partial class Order
     {
-        public Room()
+        public Order()
         {
             RoomOrders = new HashSet<RoomOrder>();
         }
 
-        public int RoomId { get; set; }
+        public int OrderId { get; set; }
         public int? HotelId { get; set; }
-        public int? RoomTypeId { get; set; }
         public string Name { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public int? Status { get; set; }
+        public int? CompanyId { get; set; }
 
+        public virtual Company Company { get; set; }
         public virtual Hotel Hotel { get; set; }
-        public virtual RoomType RoomType { get; set; }
         public virtual ICollection<RoomOrder> RoomOrders { get; set; }
     }
 }

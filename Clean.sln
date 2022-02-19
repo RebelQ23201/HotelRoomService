@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clean", "Clean\Clean.csproj", "{678324EE-806C-4655-A35A-95E70A1696C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean", "Clean\Clean.csproj", "{678324EE-806C-4655-A35A-95E70A1696C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanService", "CleanService\CleanService.csproj", "{825BCE80-4193-4F51-A6F6-8A248DE0CB1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{678324EE-806C-4655-A35A-95E70A1696C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{678324EE-806C-4655-A35A-95E70A1696C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{678324EE-806C-4655-A35A-95E70A1696C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{825BCE80-4193-4F51-A6F6-8A248DE0CB1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{825BCE80-4193-4F51-A6F6-8A248DE0CB1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{825BCE80-4193-4F51-A6F6-8A248DE0CB1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{825BCE80-4193-4F51-A6F6-8A248DE0CB1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

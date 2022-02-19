@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Clean.DataContext
+namespace CleanService.DBContext
 {
     public partial class RoomType
     {
@@ -18,7 +18,7 @@ namespace Clean.DataContext
         public string Name { get; set; }
 
         public virtual Hotel Hotel { get; set; }
-        public virtual SystemRoomType1 SystemRoomType { get; set; }
+        public virtual SystemRoomType SystemRoomType { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
     }
 }

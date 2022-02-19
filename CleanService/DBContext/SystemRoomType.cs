@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Clean.DataContext
+namespace CleanService.DBContext
 {
-    public partial class SystemRoomType1
+    public partial class SystemRoomType
     {
-        public SystemRoomType1()
+        public SystemRoomType()
         {
             RoomTypes = new HashSet<RoomType>();
         }

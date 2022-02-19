@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Clean.DataContext
+namespace CleanService.DBContext
 {
     public partial class OrderDetail
     {
