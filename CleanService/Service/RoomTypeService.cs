@@ -2,7 +2,6 @@
 using CleanService.IService;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,29 +10,29 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class CompanyService : IBaseService<Company>
+    class RoomTypeService : IBaseService<RoomType>
     {
-        public async Task<IEnumerable<Company>> GetList(Expression<Func<Company, bool>> query)
+        public async Task<IEnumerable<RoomType>> GetList(Expression<Func<RoomType, bool>> query)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Company> list = await context.Companies.Where(query).ToArrayAsync();
+                IEnumerable<RoomType> list = await context.RoomTypes.Where(query).ToArrayAsync();
                 return list;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
-            return new List<Company>();
+            return new List<RoomType>();
         }
-        public async Task<Company> GetById(int id)
+        public async Task<RoomType> GetById(int id)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                return company;
+                RoomType roomType = await context.RoomTypes.FindAsync(id);
+                return roomType;
             }
             catch (Exception e)
             {
@@ -46,12 +45,12 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                if (company == null)
+                RoomType roomType = await context.RoomTypes.FindAsync(id);
+                if (roomType == null)
                 {
                     return false;
                 }
-                context.Companies.Remove(company);
+                context.RoomTypes.Remove(roomType);
                 context.SaveChanges();
                 return true;
             }
@@ -64,17 +63,17 @@ namespace CleanService.Service
 
 
 
-        public async Task<bool> Update(Company c)
+        public async Task<bool> Update(RoomType c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company == null)
+                RoomType roomType = await context.RoomTypes.FindAsync(c.RoomTypeId);
+                if (roomType == null)
                 {
                     return false;
                 }
-                context.Entry(company).State = EntityState.Modified;
+                context.Entry(roomType).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
             }
@@ -85,19 +84,17 @@ namespace CleanService.Service
             return false;
         }
 
-
-
-        public async Task<bool> Create(Company c)
+        public async Task<bool> Create(RoomType c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company != null)
+                RoomType roomType = await context.RoomTypes.FindAsync(c.RoomTypeId);
+                if (roomType != null)
                 {
                     return false;
                 }
-                context.Companies.AddAsync(c);
+                context.RoomTypes.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }

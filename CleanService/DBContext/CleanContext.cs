@@ -19,34 +19,60 @@ namespace CleanService.DBContext
         {
         }
 
+        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Hotel> Hotels { get; set; }
+        public virtual DbSet<HotelMember> HotelMembers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<RoomOrder> RoomOrders { get; set; }
         public virtual DbSet<RoomService> RoomServices { get; set; }
         public virtual DbSet<RoomType> RoomTypes { get; set; }
         public virtual DbSet<Service> Services { get; set; }
-        public virtual DbSet<SystemRoomType> SystemRoomType1s { get; set; }
+        public virtual DbSet<SystemRoomType> SystemRoomTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                IConfiguration config = new ConfigurationBuilder()
-                                    .SetBasePath(Directory.GetCurrentDirectory())
-                                    .AddJsonFile("appsettings.json", true, true)
-                                    .Build();
-                string connectionString = config["ConnectionStrings:CleanContext"];
+                string connectionString=GetConnectionString();
                 optionsBuilder.UseSqlServer(connectionString);
+            }
+            string GetConnectionString()
+            {
+                IConfiguration config = new ConfigurationBuilder()
+                                   .SetBasePath(Directory.GetCurrentDirectory())
+                                   .AddJsonFile("appsettings.json", true, true)
+                                   .Build();
+                string connectionString = config["ConnectionStrings:CleanContext"];
+                return connectionString;
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<Account>(entity =>
+            {
+                entity.ToTable("Account");
+
+                entity.Property(e => e.AccountId).HasColumnName("AccountID");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.RoleId)
+                    .HasConstraintName("FK_Account_Role");
+            });
 
             modelBuilder.Entity<Company>(entity =>
             {
@@ -106,6 +132,30 @@ namespace CleanService.DBContext
                 entity.Property(e => e.Phone).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<HotelMember>(entity =>
+            {
+                entity.HasKey(e => e.MemberId);
+
+                entity.ToTable("HotelMember");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.Address).HasMaxLength(50);
+
+                entity.Property(e => e.Email).HasMaxLength(100);
+
+                entity.Property(e => e.HotelId).HasColumnName("HotelID");
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(12)
+                    .IsFixedLength(true);
+
+                entity.HasOne(d => d.Hotel)
+                    .WithMany(p => p.HotelMembers)
+                    .HasForeignKey(d => d.HotelId)
+                    .HasConstraintName("FK_HotelMember_Hotel");
+            });
+
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.ToTable("Order");
@@ -163,6 +213,15 @@ namespace CleanService.DBContext
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ServiceId)
                     .HasConstraintName("FK_OrderDetail_Service");
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("Role");
+
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.Property(e => e.RoleName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Room>(entity =>
@@ -279,9 +338,7 @@ namespace CleanService.DBContext
 
             modelBuilder.Entity<SystemRoomType>(entity =>
             {
-                entity.HasKey(e => e.SystemRoomTypeId);
-
-                entity.ToTable("SystemRoomType1");
+                entity.ToTable("SystemRoomType");
 
                 entity.Property(e => e.SystemRoomTypeId)
                     .ValueGeneratedNever()

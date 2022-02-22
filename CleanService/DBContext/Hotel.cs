@@ -9,6 +9,7 @@ namespace CleanService.DBContext
     {
         public Hotel()
         {
+            HotelMembers = new HashSet<HotelMember>();
             Orders = new HashSet<Order>();
             RoomTypes = new HashSet<RoomType>();
             Rooms = new HashSet<Room>();
@@ -20,6 +21,7 @@ namespace CleanService.DBContext
         public string Phone { get; set; }
         public string Email { get; set; }
 
+        public virtual ICollection<HotelMember> HotelMembers { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<RoomType> RoomTypes { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
