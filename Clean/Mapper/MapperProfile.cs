@@ -33,7 +33,12 @@ namespace Clean.Mapper
                             .ReverseMap();
             CreateMap<SystemRoomTypeModel, SystemRoomType>()
                             .ReverseMap();
-
+            CreateMap<HotelMemberModel, HotelMember>()
+                            .ReverseMap();
+            CreateMap<RoleModel, Role>()
+                            .ReverseMap();
+            CreateMap<AccountModel, Account>()
+                            .ReverseMap();
         }
     }
 }
