@@ -2,7 +2,6 @@
 using CleanService.IService;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,29 +10,29 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class CompanyService : IBaseService<Company>
+    class AccountService : IBaseService<Account>
     {
-        public async Task<IEnumerable<Company>> GetList(Expression<Func<Company, bool>> query)
+        public async Task<IEnumerable<Account>> GetList(Expression<Func<Account, bool>> query)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Company> list = await context.Companies.Where(query).ToArrayAsync();
+                IEnumerable<Account> list = await context.Accounts.Where(query).ToArrayAsync();
                 return list;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
-            return new List<Company>();
+            return new List<Account>();
         }
-        public async Task<Company> GetById(int id)
+        public async Task<Account> GetById(int id)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                return company;
+                Account account = await context.Accounts.FindAsync(id);
+                return account;
             }
             catch (Exception e)
             {
@@ -46,12 +45,12 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                if (company == null)
+                Account account = await context.Accounts.FindAsync(id);
+                if (account == null)
                 {
                     return false;
                 }
-                context.Companies.Remove(company);
+                context.Accounts.Remove(account);
                 context.SaveChanges();
                 return true;
             }
@@ -64,17 +63,17 @@ namespace CleanService.Service
 
 
 
-        public async Task<bool> Update(Company c)
+        public async Task<bool> Update(Account c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company == null)
+                Account account = await context.Accounts.FindAsync(c.AccountId);
+                if (account == null)
                 {
                     return false;
                 }
-                context.Entry(company).State = EntityState.Modified;
+                context.Entry(account).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
             }
@@ -85,19 +84,17 @@ namespace CleanService.Service
             return false;
         }
 
-
-
-        public async Task<bool> Create(Company c)
+        public async Task<bool> Create(Account c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company != null)
+                Account account = await context.Accounts.FindAsync(c.AccountId);
+                if (account != null)
                 {
                     return false;
                 }
-                context.Companies.AddAsync(c);
+                context.Accounts.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }

@@ -62,9 +62,9 @@ namespace Clean.Controllers
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CompanyModel>> GetCompany(int id) 
+        public async Task<ActionResult<CompanyModel>> GetCompany(int id)
         {
-            Company company =  await companyService.GetById(id);
+            Company company = await companyService.GetById(id);
 
             if (company == null)
             {
@@ -121,11 +121,11 @@ namespace Clean.Controllers
             //await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            if(!await companyService.Create(company))
+            if (!await companyService.Create(company))
             {
                 return NotFound();
             }
-            return CreatedAtAction(nameof(GetCompanies), new { id = company.CompanyId}, company);
+            return CreatedAtAction(nameof(GetCompanies), new { id = company.CompanyId }, company);
         }
 
         // DELETE: api/TodoItems/5
@@ -140,7 +140,7 @@ namespace Clean.Controllers
 
             //_context.Companies.Remove(company);
             //await _context.SaveChangesAsync();
-            if(!await companyService.Delete(id))
+            if (!await companyService.Delete(id))
             {
                 return NotFound();
             }
