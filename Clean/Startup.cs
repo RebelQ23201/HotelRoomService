@@ -37,12 +37,21 @@ namespace Clean
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clean", Version = "v1" });
             });
 
-            //services.AddDbContext<CleanDBContext>(options =>
-            //        options.UseSqlServer(Configuration.GetConnectionString("CleanContext")));
 
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
-            services.AddSingleton(typeof(IBaseService<Company>), typeof(CompanyService));
-            //services.AddScoped(typeof(ICompanyService), typeof(CompanyService));
+            services.AddSingleton(typeof(IBaseService<Account>), typeof(AccountService));
+            services.AddSingleton(typeof(IBaseService<Employee>), typeof(EmployeeService));
+            services.AddSingleton(typeof(IBaseService<HotelMember>), typeof(HotelMemberService));
+            services.AddSingleton(typeof(IBaseService<Hotel>), typeof(HotelService));
+            services.AddSingleton(typeof(IBaseService<OrderDetail>), typeof(OrderDetailService));
+            services.AddSingleton(typeof(IBaseService<Order>), typeof(OrderService));
+            services.AddSingleton(typeof(IBaseService<Role>), typeof(RoleService));
+            services.AddSingleton(typeof(IBaseService<Room>), typeof(RoomManagementService));
+            services.AddSingleton(typeof(IBaseService<RoomOrder>), typeof(RoomOrderService));
+            services.AddSingleton(typeof(IBaseService<RoomService>), typeof(RoomServiceService));
+            services.AddSingleton(typeof(IBaseService<RoomType>), typeof(RoomTypeService));
+            services.AddSingleton(typeof(IBaseService<Service>), typeof(ServiceService));
+            services.AddSingleton(typeof(IBaseService<SystemRoomType>), typeof(SystemRoomTypeService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

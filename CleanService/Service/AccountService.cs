@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    class AccountService : IBaseService<Account>
+    public class AccountService : IBaseService<Account>
     {
         public async Task<IEnumerable<Account>> GetList(Expression<Func<Account, bool>> query)
         {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    class RoomTypeService : IBaseService<RoomType>
+    public class RoomTypeService : IBaseService<RoomType>
     {
         public async Task<IEnumerable<RoomType>> GetList(Expression<Func<RoomType, bool>> query)
         {
