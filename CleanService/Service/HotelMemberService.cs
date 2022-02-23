@@ -68,7 +68,7 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                HotelMember hotelMember = await context.HotelMembers.FindAsync(c.HotelMemberId);
+                HotelMember hotelMember = await context.HotelMembers.FindAsync(c.MemberId);
                 if (hotelMember == null)
                 {
                     return false;
@@ -89,7 +89,7 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                HotelMember hotelMember = await context.HotelMembers.FindAsync(c.HotelMemberId);
+                HotelMember hotelMember = await context.HotelMembers.FindAsync(c.MemberId);
                 if (hotelMember != null)
                 {
                     return false;
