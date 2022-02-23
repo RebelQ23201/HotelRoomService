@@ -68,7 +68,7 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                DBContext.Service service = await context.Services.FindAsync(c.DBContext.ServiceId);
+                DBContext.Service service = await context.Services.FindAsync(c.ServiceId);
                 if (service == null)
                 {
                     return false;
@@ -89,7 +89,7 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                DBContext.Service service = await context.Services.FindAsync(c.DBContext.ServiceId);
+                DBContext.Service service = await context.Services.FindAsync(c.ServiceId);
                 if (service != null)
                 {
                     return false;
