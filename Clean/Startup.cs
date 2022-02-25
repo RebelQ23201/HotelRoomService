@@ -40,6 +40,7 @@ namespace Clean
 
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
             services.AddSingleton(typeof(IBaseService<Account>), typeof(AccountService));
+            services.AddSingleton(typeof(IBaseService<Company>), typeof(CompanyService));
             services.AddSingleton(typeof(IBaseService<Employee>), typeof(EmployeeService));
             services.AddSingleton(typeof(IBaseService<HotelMember>), typeof(HotelMemberService));
             services.AddSingleton(typeof(IBaseService<Hotel>), typeof(HotelService));
