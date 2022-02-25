@@ -2,7 +2,6 @@
 using CleanService.IService;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,29 +10,29 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class CompanyService : IBaseService<Company>
+    class EmployeeService:IBaseService<Employee>
     {
-        public async Task<IEnumerable<Company>> GetList(Expression<Func<Company, bool>> query)
+        public async Task<IEnumerable<Employee>> GetList(Expression<Func<Employee, bool>> query)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Company> list = await context.Companies.Where(query).ToArrayAsync();
+                IEnumerable<Employee> list = await context.Employees.Where(query).ToArrayAsync();
                 return list;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
-            return new List<Company>();
+            return new List<Employee>();
         }
-        public async Task<Company> GetById(int id)
+        public async Task<Employee> GetById(int id)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                return company;
+                Employee employee = await context.Employees.FindAsync(id);
+                return employee;
             }
             catch (Exception e)
             {
@@ -46,12 +45,12 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                if (company == null)
+                Employee employee = await context.Employees.FindAsync(id);
+                if (employee == null)
                 {
                     return false;
                 }
-                context.Companies.Remove(company);
+                context.Employees.Remove(employee);
                 context.SaveChanges();
                 return true;
             }
@@ -59,22 +58,22 @@ namespace CleanService.Service
             {
                 throw new Exception(e.Message);
             }
-            //return false;
+            return false;
         }
 
 
 
-        public async Task<bool> Update(Company c)
+        public async Task<bool> Update(Employee c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company == null)
+                Employee employee = await context.Employees.FindAsync(c.EmployeeId);
+                if (employee == null)
                 {
                     return false;
                 }
-                context.Entry(company).State = EntityState.Modified;
+                context.Entry(employee).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
             }
@@ -82,22 +81,20 @@ namespace CleanService.Service
             {
                 throw new Exception(e.Message);
             }
-            //return false;
+            return false;
         }
 
-
-
-        public async Task<bool> Create(Company c)
+        public async Task<bool> Create(Employee c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company != null)
+                Employee employee = await context.Employees.FindAsync(c.EmployeeId);
+                if (employee != null)
                 {
                     return false;
                 }
-                await context.Companies.AddAsync(c);
+                context.Employees.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }

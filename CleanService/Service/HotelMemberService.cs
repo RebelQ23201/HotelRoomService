@@ -2,7 +2,6 @@
 using CleanService.IService;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,29 +10,29 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class CompanyService : IBaseService<Company>
+    class HotelMemberService : IBaseService<HotelMember>
     {
-        public async Task<IEnumerable<Company>> GetList(Expression<Func<Company, bool>> query)
+        public async Task<IEnumerable<HotelMember>> GetList(Expression<Func<HotelMember, bool>> query)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Company> list = await context.Companies.Where(query).ToArrayAsync();
+                IEnumerable<HotelMember> list = await context.HotelMembers.Where(query).ToArrayAsync();
                 return list;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
-            return new List<Company>();
+            return new List<HotelMember>();
         }
-        public async Task<Company> GetById(int id)
+        public async Task<HotelMember> GetById(int id)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                return company;
+                HotelMember hotelMember = await context.HotelMembers.FindAsync(id);
+                return hotelMember;
             }
             catch (Exception e)
             {
@@ -46,12 +45,12 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                if (company == null)
+                HotelMember hotelMember = await context.HotelMembers.FindAsync(id);
+                if (hotelMember == null)
                 {
                     return false;
                 }
-                context.Companies.Remove(company);
+                context.HotelMembers.Remove(hotelMember);
                 context.SaveChanges();
                 return true;
             }
@@ -59,22 +58,22 @@ namespace CleanService.Service
             {
                 throw new Exception(e.Message);
             }
-            //return false;
+            return false;
         }
 
 
 
-        public async Task<bool> Update(Company c)
+        public async Task<bool> Update(HotelMember c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company == null)
+                HotelMember hotelMember = await context.HotelMembers.FindAsync(c.MemberId);
+                if (hotelMember == null)
                 {
                     return false;
                 }
-                context.Entry(company).State = EntityState.Modified;
+                context.Entry(hotelMember).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
             }
@@ -82,22 +81,20 @@ namespace CleanService.Service
             {
                 throw new Exception(e.Message);
             }
-            //return false;
+            return false;
         }
 
-
-
-        public async Task<bool> Create(Company c)
+        public async Task<bool> Create(HotelMember c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company != null)
+                HotelMember hotelMember = await context.HotelMembers.FindAsync(c.MemberId);
+                if (hotelMember != null)
                 {
                     return false;
                 }
-                await context.Companies.AddAsync(c);
+                context.HotelMembers.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }
@@ -109,3 +106,4 @@ namespace CleanService.Service
         }
     }
 }
+

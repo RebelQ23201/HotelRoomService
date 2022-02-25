@@ -2,7 +2,6 @@
 using CleanService.IService;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,29 +10,29 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class CompanyService : IBaseService<Company>
+    class HotelService : IBaseService<Hotel>
     {
-        public async Task<IEnumerable<Company>> GetList(Expression<Func<Company, bool>> query)
+        public async Task<IEnumerable<Hotel>> GetList(Expression<Func<Hotel, bool>> query)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Company> list = await context.Companies.Where(query).ToArrayAsync();
+                IEnumerable<Hotel> list = await context.Hotels.Where(query).ToArrayAsync();
                 return list;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
-            return new List<Company>();
+            return new List<Hotel>();
         }
-        public async Task<Company> GetById(int id)
+        public async Task<Hotel> GetById(int id)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                return company;
+                Hotel hotel = await context.Hotels.FindAsync(id);
+                return hotel;
             }
             catch (Exception e)
             {
@@ -46,12 +45,12 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
-                if (company == null)
+                Hotel hotel = await context.Hotels.FindAsync(id);
+                if (hotel == null)
                 {
                     return false;
                 }
-                context.Companies.Remove(company);
+                context.Hotels.Remove(hotel);
                 context.SaveChanges();
                 return true;
             }
@@ -59,22 +58,22 @@ namespace CleanService.Service
             {
                 throw new Exception(e.Message);
             }
-            //return false;
+            return false;
         }
 
 
 
-        public async Task<bool> Update(Company c)
+        public async Task<bool> Update(Hotel c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company == null)
+                Hotel hotel = await context.Hotels.FindAsync(c.HotelId);
+                if (hotel == null)
                 {
                     return false;
                 }
-                context.Entry(company).State = EntityState.Modified;
+                context.Entry(hotel).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
             }
@@ -82,22 +81,22 @@ namespace CleanService.Service
             {
                 throw new Exception(e.Message);
             }
-            //return false;
+            return false;
         }
 
 
 
-        public async Task<bool> Create(Company c)
+        public async Task<bool> Create(Hotel c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(c.CompanyId);
-                if (company != null)
+                Hotel hotel = await context.Hotels.FindAsync(c.HotelId);
+                if (hotel != null)
                 {
                     return false;
                 }
-                await context.Companies.AddAsync(c);
+                context.Hotels.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }
