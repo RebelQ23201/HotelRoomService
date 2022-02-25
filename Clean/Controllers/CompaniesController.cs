@@ -19,14 +19,13 @@ namespace Clean.Controllers
     [ApiController]
     public class CompaniesController : Controller
     {
-        private readonly IBaseService<Company> companyService;
-        //private readonly ICompanyService companyService;
+        private readonly IBaseService<Company> service;
         private readonly IMapper mappper;
 
         //public CompaniesController(IBaseService<Company> companyService, IMapper mappper)
-        public CompaniesController(IBaseService<Company> companyService, IMapper mappper)
+        public CompaniesController(IBaseService<Company> service, IMapper mappper)
         {
-            this.companyService = companyService;
+            this.service = service;
             this.mappper = mappper;
         }
 
@@ -55,7 +54,7 @@ namespace Clean.Controllers
             {
                 filters.AndAlso(c => c.Email == email);
             }
-            List<Company> companies = (await companyService.GetList(filters)).ToList();
+            List<Company> companies = (await service.GetList(filters)).ToList();
             List<CompanyModel> models = mappper.Map<List<CompanyModel>>(companies);
             return models;
         }
@@ -64,7 +63,7 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CompanyModel>> GetCompany(int id)
         {
-            Company company = await companyService.GetById(id);
+            Company company = await service.GetById(id);
 
             if (company == null)
             {
@@ -104,7 +103,7 @@ namespace Clean.Controllers
             //    }
             //}
 
-            if (!await companyService.Update(company))
+            if (!await service.Update(company))
             {
                 return NotFound();
             }
@@ -121,7 +120,7 @@ namespace Clean.Controllers
             //await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            if (!await companyService.Create(company))
+            if (!await service.Create(company))
             {
                 return NotFound();
             }
@@ -140,7 +139,7 @@ namespace Clean.Controllers
 
             //_context.Companies.Remove(company);
             //await _context.SaveChangesAsync();
-            if (!await companyService.Delete(id))
+            if (!await service.Delete(id))
             {
                 return NotFound();
             }

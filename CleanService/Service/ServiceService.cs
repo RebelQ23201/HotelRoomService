@@ -10,29 +10,29 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class RoleService : IBaseService<Role>
+    public class ServiceService : IBaseService<DBContext.Service>
     {
-        public async Task<IEnumerable<Role>> GetList(Expression<Func<Role, bool>> query)
+        public async Task<IEnumerable<DBContext.Service>> GetList(Expression<Func<DBContext.Service, bool>> query)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Role> list = await context.Roles.Where(query).ToArrayAsync();
+                IEnumerable<DBContext.Service> list = await context.Services.Where(query).ToArrayAsync();
                 return list;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
-            return new List<Role>();
+            return new List<DBContext.Service>();
         }
-        public async Task<Role> GetById(int id)
+        public async Task<DBContext.Service> GetById(int id)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Role role = await context.Roles.FindAsync(id);
-                return role;
+                DBContext.Service service = await context.Services.FindAsync(id);
+                return service;
             }
             catch (Exception e)
             {
@@ -45,12 +45,12 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Role role = await context.Roles.FindAsync(id);
-                if (role == null)
+                DBContext.Service service = await context.Services.FindAsync(id);
+                if (service == null)
                 {
                     return false;
                 }
-                context.Roles.Remove(role);
+                context.Services.Remove(service);
                 context.SaveChanges();
                 return true;
             }
@@ -63,17 +63,17 @@ namespace CleanService.Service
 
 
 
-        public async Task<bool> Update(Role c)
+        public async Task<bool> Update(DBContext.Service c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Role role = await context.Roles.FindAsync(c.RoleId);
-                if (role == null)
+                DBContext.Service service = await context.Services.FindAsync(c.ServiceId);
+                if (service == null)
                 {
                     return false;
                 }
-                context.Entry(role).State = EntityState.Modified;
+                context.Entry(service).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
             }
@@ -84,17 +84,17 @@ namespace CleanService.Service
             return false;
         }
 
-        public async Task<bool> Create(Role c)
+        public async Task<bool> Create(DBContext.Service c)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Role role = await context.Roles.FindAsync(c.RoleId);
-                if (role != null)
+                DBContext.Service service = await context.Services.FindAsync(c.ServiceId);
+                if (service != null)
                 {
                     return false;
                 }
-                context.Roles.AddAsync(c);
+                context.Services.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }
@@ -106,4 +106,3 @@ namespace CleanService.Service
         }
     }
 }
-
