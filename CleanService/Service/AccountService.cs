@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    class AccountService : IBaseService<Account>
+    public class AccountService : IAccountService<Account>
     {
         public async Task<IEnumerable<Account>> GetList(Expression<Func<Account, bool>> query)
         {
@@ -95,6 +95,54 @@ namespace CleanService.Service
                     return false;
                 }
                 context.Accounts.AddAsync(c);
+                context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return false;
+        }
+
+        public async Task<Account> GetEmail(string email)
+        {
+            
+            try
+            {
+                using CleanContext context = new CleanContext();
+
+                Account account = await context.Accounts.Where(acc => acc.Email.Equals(email)).FirstOrDefaultAsync();
+
+                if (account == null)
+                {
+                    return null;
+                }
+                
+                
+                return account;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return null;
+        }
+
+        public async Task<bool> CreateViaSignIn(string email)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+                IEnumerable<Account> list = await context.Accounts.ToArrayAsync();
+
+                Account c = new Account();
+                c.RoleId = 1;
+                c.Email = email;
+
+                System.Diagnostics.Debug.WriteLine(c.AccountId + " " + c.RoleId + " " + c.Email);
+
+                await context.Accounts.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }

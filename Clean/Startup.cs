@@ -18,6 +18,9 @@ using CleanService.DBContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Authentication.OAuth;
 
 namespace Clean
 {
@@ -33,7 +36,6 @@ namespace Clean
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
 
             var key = "This is my first Test Key";
@@ -65,7 +67,20 @@ namespace Clean
 
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
             services.AddSingleton(typeof(IBaseService<Company>), typeof(CompanyService));
+            services.AddSingleton(typeof(IAccountService<Account>), typeof(AccountService));
+            services.AddSingleton(typeof(IBaseService<Role>), typeof(RoleService));
+
             //services.AddScoped(typeof(ICompanyService), typeof(CompanyService));
+
+            IConfiguration config = new ConfigurationBuilder()
+                                   .SetBasePath(Directory.GetCurrentDirectory())
+                                   .AddJsonFile("appsettings.Development.json", true, true)
+                                   .Build();
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = config["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = config["Authentication:Google:ClientSecret"];
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +98,14 @@ namespace Clean
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Clean v1"));
             }
+
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "")),
+                RequestPath = "/Clean",
+                EnableDefaultFiles = true
+            });
 
             app.UseHttpsRedirection();
 
