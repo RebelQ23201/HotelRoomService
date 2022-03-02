@@ -47,7 +47,7 @@ namespace CleanService.DBContext
                                    .SetBasePath(Directory.GetCurrentDirectory())
                                    .AddJsonFile("appsettings.Development.json", true, true)
                                    .Build();
-                string connectionString = config["ConnectionStrings:CleanContextHome"];
+                string connectionString = config["ConnectionStrings:CleanContext"];
                 return connectionString;
             }
         }

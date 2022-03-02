@@ -38,6 +38,13 @@ namespace Clean
         {
             services.AddControllers();
 
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.WithOrigins("*")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+            }));
+
             var key = "This is my first Test Key";
             services.AddAuthentication(x =>
             {
@@ -106,6 +113,8 @@ namespace Clean
                 RequestPath = "/Clean",
                 EnableDefaultFiles = true
             });
+
+            app.UseCors("MyPolicy");
 
             app.UseHttpsRedirection();
 
