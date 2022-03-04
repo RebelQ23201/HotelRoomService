@@ -30,7 +30,7 @@ namespace Clean.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AccountOutputModel>>> GetAccounts(
-            [FromQuery] int? id)
+            [FromQuery] int? id, bool? detailed=false)
         {
             Expression<Func<Account, bool>> filters = c => true;
             if (id != null)
@@ -38,16 +38,16 @@ namespace Clean.Controllers
                 filters = filters.AndAlso(c => c.AccountId == id);
             }
 
-            List<Account> accounts = (await service.GetList(filters)).ToList();
+            List<Account> accounts = (await service.GetList(filters, detailed)).ToList();
             List<AccountOutputModel> models = mappper.Map<List<AccountOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AccountOutputModel>> GetAccount(int id)
+        public async Task<ActionResult<AccountOutputModel>> GetAccount(int id, bool? detailed = true)
         {
-            Account account = await service.GetById(id);
+            Account account = await service.GetById(id, detailed);
 
             if (account == null)
             {
