@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Clean.Model
+namespace Clean.Model.Output
 {
     public class RoomOrderModel
     {
@@ -11,8 +11,8 @@ namespace Clean.Model
         public int? OrderId { get; set; }
         public int? RoomId { get; set; }
 
-        public virtual OrderModel Order { get; set; }
-        public virtual RoomModel Room { get; set; }
-        public virtual List<OrderDetailModel> OrderDetails { get; set; }
+        public virtual OrderOutputModel Order { get; set; }
+        public virtual RoomOutputModel Room { get; set; }
+        public virtual List<OrderDetailOutputModel> OrderDetails { get; set; }
     }
 }

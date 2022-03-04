@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderModel>>> GetOrders(
+        public async Task<ActionResult<IEnumerable<OrderOutputModel>>> GetOrders(
             [FromQuery] int? id)
         {
             Expression<Func<Order, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<Order> accounts = (await service.GetList(filters)).ToList();
-            List<OrderModel> models = mappper.Map<List<OrderModel>>(accounts);
+            List<OrderOutputModel> models = mappper.Map<List<OrderOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderModel>> GetOrder(int id)
+        public async Task<ActionResult<OrderOutputModel>> GetOrder(int id)
         {
             Order account = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            OrderModel model = mappper.Map<OrderModel>(account);
+            OrderOutputModel model = mappper.Map<OrderOutputModel>(account);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<OrderModel>> PostOrder(Order account)
+        public async Task<ActionResult<OrderOutputModel>> PostOrder(Order account)
         {
             if (!await service.Create(account))
             {

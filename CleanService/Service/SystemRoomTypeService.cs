@@ -12,7 +12,7 @@ namespace CleanService.Service
 {
     public class SystemRoomTypeService : IBaseService<SystemRoomType>
     {
-        public async Task<IEnumerable<SystemRoomType>> GetList(Expression<Func<SystemRoomType, bool>> query)
+        public async Task<IEnumerable<SystemRoomType>> GetList(Expression<Func<SystemRoomType, bool>> query, bool? isDeep)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace CleanService.Service
             }
             return new List<SystemRoomType>();
         }
-        public async Task<SystemRoomType> GetById(int id)
+        public async Task<SystemRoomType> GetById(int id, bool? isDeep)
         {
             try
             {

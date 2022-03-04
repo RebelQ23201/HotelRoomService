@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Clean.Model
+namespace Clean.Model.Output
 {
-    public class OrderModel
+    public class OrderOutputModel
     {
         public int OrderId { get; set; }
         public int? HotelId { get; set; }
@@ -15,8 +15,8 @@ namespace Clean.Model
         public int? Status { get; set; }
         public int? CompanyId { get; set; }
 
-        public virtual CompanyModel Company { get; set; }
-        public virtual HotelModel Hotel { get; set; }
+        public virtual CompanyOutputModel Company { get; set; }
+        public virtual HotelOutputModel Hotel { get; set; }
         public virtual List<RoomOrderModel> RoomOrders { get; set; }
     }
 }

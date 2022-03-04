@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmployeeModel>>> GetEmployees(
+        public async Task<ActionResult<IEnumerable<EmployeeOutputModel>>> GetEmployees(
             [FromQuery] int? id)
         {
             Expression<Func<Employee, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<Employee> accounts = (await service.GetList(filters)).ToList();
-            List<EmployeeModel> models = mappper.Map<List<EmployeeModel>>(accounts);
+            List<EmployeeOutputModel> models = mappper.Map<List<EmployeeOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EmployeeModel>> GetEmployee(int id)
+        public async Task<ActionResult<EmployeeOutputModel>> GetEmployee(int id)
         {
             Employee account = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            EmployeeModel model = mappper.Map<EmployeeModel>(account);
+            EmployeeOutputModel model = mappper.Map<EmployeeOutputModel>(account);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<EmployeeModel>> PostEmployee(Employee account)
+        public async Task<ActionResult<EmployeeOutputModel>> PostEmployee(Employee account)
         {
             if (!await service.Create(account))
             {

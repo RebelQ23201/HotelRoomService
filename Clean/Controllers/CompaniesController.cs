@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Clean.Model;
+using Clean.Model.Output;
 using AutoMapper;
 using CleanService.IService;
 using CleanService.Service;
@@ -30,7 +30,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompanies(
+        public async Task<ActionResult<IEnumerable<CompanyOutputModel>>> GetCompanies(
             [FromQuery] int? id, string name, string addr, string phone, string email)
         {
             Expression<Func<Company, bool>> filters = c => true;
@@ -55,13 +55,13 @@ namespace Clean.Controllers
                 filters.AndAlso(c => c.Email == email);
             }
             List<Company> companies = (await service.GetList(filters)).ToList();
-            List<CompanyModel> models = mappper.Map<List<CompanyModel>>(companies);
+            List<CompanyOutputModel> models = mappper.Map<List<CompanyOutputModel>>(companies);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CompanyModel>> GetCompany(int id)
+        public async Task<ActionResult<CompanyOutputModel>> GetCompany(int id)
         {
             Company company = await service.GetById(id);
 
@@ -70,7 +70,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            CompanyModel model = mappper.Map<CompanyModel>(company);
+            CompanyOutputModel model = mappper.Map<CompanyOutputModel>(company);
 
             return model;
         }
@@ -114,7 +114,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CompanyModel>> PostCompany(Company company)
+        public async Task<ActionResult<CompanyOutputModel>> PostCompany(Company company)
         {
             //_context.Companies.Add(company);
             //await _context.SaveChangesAsync();

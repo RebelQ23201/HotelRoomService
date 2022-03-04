@@ -12,7 +12,7 @@ namespace CleanService.Service
 {
     public class RoomManagementService : IBaseService<Room>
     {
-        public async Task<IEnumerable<Room>> GetList(Expression<Func<Room, bool>> query)
+        public async Task<IEnumerable<Room>> GetList(Expression<Func<Room, bool>> query, bool? isDeep)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace CleanService.Service
             }
             return new List<Room>();
         }
-        public async Task<Room> GetById(int id)
+        public async Task<Room> GetById(int id, bool? isDeep)
         {
             try
             {

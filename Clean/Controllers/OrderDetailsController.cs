@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDetailModel>>> GetOrderDetails(
+        public async Task<ActionResult<IEnumerable<OrderDetailOutputModel>>> GetOrderDetails(
             [FromQuery] int? id)
         {
             Expression<Func<OrderDetail, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<OrderDetail> accounts = (await service.GetList(filters)).ToList();
-            List<OrderDetailModel> models = mappper.Map<List<OrderDetailModel>>(accounts);
+            List<OrderDetailOutputModel> models = mappper.Map<List<OrderDetailOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderDetailModel>> GetOrderDetail(int id)
+        public async Task<ActionResult<OrderDetailOutputModel>> GetOrderDetail(int id)
         {
             OrderDetail account = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            OrderDetailModel model = mappper.Map<OrderDetailModel>(account);
+            OrderDetailOutputModel model = mappper.Map<OrderDetailOutputModel>(account);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<OrderDetailModel>> PostOrderDetail(OrderDetail account)
+        public async Task<ActionResult<OrderDetailOutputModel>> PostOrderDetail(OrderDetail account)
         {
             if (!await service.Create(account))
             {

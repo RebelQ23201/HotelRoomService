@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Clean.Model
+namespace Clean.Model.Output
 {
-    public class ServiceModel
+    public class ServiceOutputModel
     {
         public int ServiceId { get; set; }
         public int? CompanyId { get; set; }
         public string Name { get; set; }
         public double? Price { get; set; }
 
-        public virtual CompanyModel Company { get; set; }
-        public virtual List<OrderDetailModel> OrderDetails { get; set; }
+        public virtual CompanyOutputModel Company { get; set; }
+        public virtual List<OrderDetailOutputModel> OrderDetails { get; set; }
     }
 }

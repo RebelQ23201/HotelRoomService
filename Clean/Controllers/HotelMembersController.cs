@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HotelMemberModel>>> GetHotelMembers(
+        public async Task<ActionResult<IEnumerable<HotelMemberOutputModel>>> GetHotelMembers(
             [FromQuery] int? id)
         {
             Expression<Func<HotelMember, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<HotelMember> accounts = (await service.GetList(filters)).ToList();
-            List<HotelMemberModel> models = mappper.Map<List<HotelMemberModel>>(accounts);
+            List<HotelMemberOutputModel> models = mappper.Map<List<HotelMemberOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<HotelMemberModel>> GetHotelMember(int id)
+        public async Task<ActionResult<HotelMemberOutputModel>> GetHotelMember(int id)
         {
             HotelMember account = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            HotelMemberModel model = mappper.Map<HotelMemberModel>(account);
+            HotelMemberOutputModel model = mappper.Map<HotelMemberOutputModel>(account);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<HotelMemberModel>> PostHotelMember(HotelMember account)
+        public async Task<ActionResult<HotelMemberOutputModel>> PostHotelMember(HotelMember account)
         {
             if (!await service.Create(account))
             {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ServiceModel>>> GetServices(
+        public async Task<ActionResult<IEnumerable<ServiceOutputModel>>> GetServices(
             [FromQuery] int? id)
         {
             Expression<Func<Service, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<Service> accounts = (await service.GetList(filters)).ToList();
-            List<ServiceModel> models = mappper.Map<List<ServiceModel>>(accounts);
+            List<ServiceOutputModel> models = mappper.Map<List<ServiceOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceModel>> GetService(int id)
+        public async Task<ActionResult<ServiceOutputModel>> GetService(int id)
         {
             Service account = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            ServiceModel model = mappper.Map<ServiceModel>(account);
+            ServiceOutputModel model = mappper.Map<ServiceOutputModel>(account);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ServiceModel>> PostService(Service account)
+        public async Task<ActionResult<ServiceOutputModel>> PostService(Service account)
         {
             if (!await service.Create(account))
             {

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Clean.Model
+namespace Clean.Model.Output
 {
-    public class RoleModel
+    public class RoleOutputModel
     {
 
         public int RoleId { get; set; }
         public string RoleName { get; set; }
 
-        public virtual ICollection<AccountModel> Accounts { get; set; }
+        //public virtual ICollection<AccountModel> Accounts { get; set; }
     }
 }

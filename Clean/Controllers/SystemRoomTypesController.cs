@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SystemRoomTypeModel>>> GetSystemRoomTypes(
+        public async Task<ActionResult<IEnumerable<SystemRoomTypeOutputModel>>> GetSystemRoomTypes(
             [FromQuery] int? id)
         {
             Expression<Func<SystemRoomType, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<SystemRoomType> accounts = (await service.GetList(filters)).ToList();
-            List<SystemRoomTypeModel> models = mappper.Map<List<SystemRoomTypeModel>>(accounts);
+            List<SystemRoomTypeOutputModel> models = mappper.Map<List<SystemRoomTypeOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SystemRoomTypeModel>> GetSystemRoomType(int id)
+        public async Task<ActionResult<SystemRoomTypeOutputModel>> GetSystemRoomType(int id)
         {
             SystemRoomType account = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            SystemRoomTypeModel model = mappper.Map<SystemRoomTypeModel>(account);
+            SystemRoomTypeOutputModel model = mappper.Map<SystemRoomTypeOutputModel>(account);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<SystemRoomTypeModel>> PostSystemRoomType(SystemRoomType account)
+        public async Task<ActionResult<SystemRoomTypeOutputModel>> PostSystemRoomType(SystemRoomType account)
         {
             if (!await service.Create(account))
             {

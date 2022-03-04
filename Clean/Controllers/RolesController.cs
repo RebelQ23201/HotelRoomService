@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoleModel>>> GetRoles(
+        public async Task<ActionResult<IEnumerable<RoleOutputModel>>> GetRoles(
             [FromQuery] int? id)
         {
             Expression<Func<Role, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<Role> role = (await service.GetList(filters)).ToList();
-            List<RoleModel> models = mappper.Map<List<RoleModel>>(role);
+            List<RoleOutputModel> models = mappper.Map<List<RoleOutputModel>>(role);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RoleModel>> GetRole(int id)
+        public async Task<ActionResult<RoleOutputModel>> GetRole(int id)
         {
             Role role = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            RoleModel model = mappper.Map<RoleModel>(role);
+            RoleOutputModel model = mappper.Map<RoleOutputModel>(role);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RoleModel>> PostRole(Role role)
+        public async Task<ActionResult<RoleOutputModel>> PostRole(Role role)
         {
             if (!await service.Create(role))
             {

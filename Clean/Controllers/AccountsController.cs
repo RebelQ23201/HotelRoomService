@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -29,7 +29,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AccountModel>>> GetAccounts(
+        public async Task<ActionResult<IEnumerable<AccountOutputModel>>> GetAccounts(
             [FromQuery] int? id)
         {
             Expression<Func<Account, bool>> filters = c => true;
@@ -39,13 +39,13 @@ namespace Clean.Controllers
             }
 
             List<Account> accounts = (await service.GetList(filters)).ToList();
-            List<AccountModel> models = mappper.Map<List<AccountModel>>(accounts);
+            List<AccountOutputModel> models = mappper.Map<List<AccountOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AccountModel>> GetAccount(int id)
+        public async Task<ActionResult<AccountOutputModel>> GetAccount(int id)
         {
             Account account = await service.GetById(id);
 
@@ -54,7 +54,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            AccountModel model = mappper.Map<AccountModel>(account);
+            AccountOutputModel model = mappper.Map<AccountOutputModel>(account);
 
             return model;
         }
@@ -80,7 +80,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<AccountModel>> PostAccount(Account account)
+        public async Task<ActionResult<AccountOutputModel>> PostAccount(Account account)
         {
             if (!await service.Create(account))
             {
@@ -91,7 +91,7 @@ namespace Clean.Controllers
         
         [Route("SignInWithGoogle")]
         [HttpGet()]
-        public async Task<ActionResult<AccountModel>> GetEmail(
+        public async Task<ActionResult<AccountOutputModel>> GetEmail(
             [FromQuery] string tokenid)
         {
             //get JWT token
@@ -114,11 +114,11 @@ namespace Clean.Controllers
             {
                 await service.CreateViaSignIn(email);
                 Account accountAfterCreate = await service.GetEmail(email);
-                AccountModel model2 = mappper.Map<AccountModel>(accountAfterCreate);
+                AccountOutputModel model2 = mappper.Map<AccountOutputModel>(accountAfterCreate);
                 return model2;
             }
 
-            AccountModel model = mappper.Map<AccountModel>(account);
+            AccountOutputModel model = mappper.Map<AccountOutputModel>(account);
 
             return model;
         }

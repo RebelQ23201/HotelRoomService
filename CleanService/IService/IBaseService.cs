@@ -9,8 +9,8 @@ namespace CleanService.IService
 {
     public interface IBaseService<T>
     {
-        public  Task<IEnumerable<T>> GetList(Expression<Func<T, bool>>? expression);
-        public  Task<T> GetById(int id);
+        public  Task<IEnumerable<T>> GetList(Expression<Func<T, bool>>? expression, bool? isDeep=false);
+        public  Task<T> GetById(int id, bool? isDeep=true);
         public  Task<bool> Update(T t);
         public Task<bool> Create(T t);
         public  Task<bool> Delete(int id);

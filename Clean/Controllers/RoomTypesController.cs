@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Model;
+using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoomTypeModel>>> GetRoomTypes(
+        public async Task<ActionResult<IEnumerable<RoomTypeOutputModel>>> GetRoomTypes(
             [FromQuery] int? id)
         {
             Expression<Func<RoomType, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<RoomType> accounts = (await service.GetList(filters)).ToList();
-            List<RoomTypeModel> models = mappper.Map<List<RoomTypeModel>>(accounts);
+            List<RoomTypeOutputModel> models = mappper.Map<List<RoomTypeOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RoomTypeModel>> GetRoomType(int id)
+        public async Task<ActionResult<RoomTypeOutputModel>> GetRoomType(int id)
         {
             RoomType account = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            RoomTypeModel model = mappper.Map<RoomTypeModel>(account);
+            RoomTypeOutputModel model = mappper.Map<RoomTypeOutputModel>(account);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RoomTypeModel>> PostRoomType(RoomType account)
+        public async Task<ActionResult<RoomTypeOutputModel>> PostRoomType(RoomType account)
         {
             if (!await service.Create(account))
             {

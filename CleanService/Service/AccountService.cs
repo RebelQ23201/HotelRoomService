@@ -12,12 +12,22 @@ namespace CleanService.Service
 {
     public class AccountService : IAccountService<Account>
     {
-        public async Task<IEnumerable<Account>> GetList(Expression<Func<Account, bool>> query)
+        public async Task<IEnumerable<Account>> GetList(Expression<Func<Account, bool>> query, bool? isDeep)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Account> list = await context.Accounts.Where(query).ToArrayAsync();
+                IEnumerable<Account> list;
+                if (isDeep.HasValue && isDeep.Value)
+                {
+                    list = await context.Accounts.Where(query)
+                        .Include(x => x.Role)
+                        .ToArrayAsync();
+                }
+                else
+                {
+                    list = await context.Accounts.Where(query).ToArrayAsync();
+                }
                 return list;
             }
             catch (Exception e)
@@ -26,12 +36,22 @@ namespace CleanService.Service
             }
             return new List<Account>();
         }
-        public async Task<Account> GetById(int id)
+        public async Task<Account> GetById(int id, bool? isDeep)
         {
             try
             {
                 using CleanContext context = new CleanContext();
-                Account account = await context.Accounts.FindAsync(id);
+                Account account;
+                if (isDeep.HasValue && isDeep.Value)
+                {
+                    account = await context.Accounts
+                        .Include(x => x.Role).ThenInclude(x=>x.Accounts)
+                        .SingleOrDefaultAsync(x=>x.AccountId==id);
+                }
+                else
+                {
+                    account = await context.Accounts.FindAsync(id);
+                }
                 return account;
             }
             catch (Exception e)

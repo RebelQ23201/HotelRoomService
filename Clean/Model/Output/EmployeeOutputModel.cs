@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Clean.Model
+namespace Clean.Model.Output
 {
-    public class EmployeeModel
+    public class EmployeeOutputModel
     {
         public int EmployeeId { get; set; }
         public int? CompanyId { get; set; }
@@ -14,7 +14,7 @@ namespace Clean.Model
         public string Phone { get; set; }
         public int? Status { get; set; }
 
-        public virtual CompanyModel Company { get; set; }
-        public virtual List<OrderDetailModel> OrderDetails { get; set; }
+        public virtual CompanyOutputModel Company { get; set; }
+        public virtual List<OrderDetailOutputModel> OrderDetails { get; set; }
     }
 }
