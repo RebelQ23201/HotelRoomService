@@ -3,12 +3,15 @@ using Clean.Model;
 using Clean.Util;
 using CleanService.DBContext;
 using CleanService.IService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Clean.Controllers
 {
@@ -16,13 +19,14 @@ namespace Clean.Controllers
     [ApiController]
     public class AccountsController : Controller
     {
-        private readonly IBaseService<Account> service;
+        private readonly IAccountService<Account> accountService;
+        //private readonly ICompanyService companyService;
         private readonly IMapper mappper;
 
-        //public CompaniesController(IBaseService<Account> accountService, IMapper mappper)
-        public AccountsController(IBaseService<Account> service, IMapper mappper)
+        //public CompaniesController(IBaseService<Company> companyService, IMapper mappper)
+        public AccountsController(IAccountService<Account> accountService, IMapper mappper)
         {
-            this.service = service;
+            this.accountService = accountService;
             this.mappper = mappper;
         }
 
@@ -45,7 +49,7 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<AccountModel>> GetAccount(int id)
         {
-            Account account = await service.GetById(id);
+            Account account = await accountService.GetById(id);
 
             if (account == null)
             {
@@ -80,11 +84,47 @@ namespace Clean.Controllers
         [HttpPost]
         public async Task<ActionResult<AccountModel>> PostAccount(Account account)
         { if (!await service.Create(account))
+        {
+            //_context.Companies.Add(company);
+            //await _context.SaveChangesAsync();
+
+            //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
+            if (!await accountService.Create(account))
             {
                 return NotFound();
             }
             return CreatedAtAction(nameof(GetAccounts), new { id = account.AccountId }, account);
         }
+        
+        [Route("SignInWithGoogle")]
+        [HttpGet()]
+        public async Task<ActionResult<AccountModel>> GetEmail(
+            [FromQuery] string tokenid)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken decodedValue = handler.ReadJwtToken(tokenid);
+            
+            JwtPayload payload = decodedValue.Payload;
+            var json = payload.SerializeToJson();
+
+            Dictionary<string?, object> sData = JsonSerializer.Deserialize<Dictionary<string?, object>>(json);
+            string email = sData["email"].ToString();
+            
+            Account account = await accountService.GetEmail(email);
+
+            if (account == null)
+            {
+                await accountService.CreateViaSignIn(email);
+                Account accountAfterCreate = await accountService.GetEmail(email);
+                AccountModel model2 = mappper.Map<AccountModel>(accountAfterCreate);
+                return model2;
+            }
+
+            AccountModel model = mappper.Map<AccountModel>(account);
+
+            return model;
+        }
+        
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
@@ -97,5 +137,10 @@ namespace Clean.Controllers
 
             return NoContent();
         }
+
+        //private bool CompanyExists(int id)
+        //{
+        //    return _context.Companies.Any(e => e.CompanyId == id);
+        //}
     }
 }

@@ -45,7 +45,7 @@ namespace CleanService.DBContext
             {
                 IConfiguration config = new ConfigurationBuilder()
                                    .SetBasePath(Directory.GetCurrentDirectory())
-                                   .AddJsonFile("appsettings.json", true, true)
+                                   .AddJsonFile("appsettings.Development.json", true, false)
                                    .Build();
                 string connectionString = config["ConnectionStrings:CleanContext"];
                 return connectionString;

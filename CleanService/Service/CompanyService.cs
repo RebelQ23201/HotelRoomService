@@ -59,7 +59,7 @@ namespace CleanService.Service
             {
                 throw new Exception(e.Message);
             }
-            return false;
+            //return false;
         }
 
 
@@ -82,7 +82,7 @@ namespace CleanService.Service
             {
                 throw new Exception(e.Message);
             }
-            return false;
+            //return false;
         }
 
 
@@ -97,7 +97,7 @@ namespace CleanService.Service
                 {
                     return false;
                 }
-                context.Companies.AddAsync(c);
+                await context.Companies.AddAsync(c);
                 context.SaveChanges();
                 return true;
             }

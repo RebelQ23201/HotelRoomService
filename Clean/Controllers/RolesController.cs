@@ -98,5 +98,10 @@ namespace Clean.Controllers
 
             return NoContent();
         }
+
+        //private bool CompanyExists(int id)
+        //{
+        //    return _context.Companies.Any(e => e.CompanyId == id);
+        //}
     }
 }
