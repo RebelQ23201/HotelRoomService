@@ -36,8 +36,8 @@ namespace Clean.Controllers
                 filters = filters.AndAlso(c => c.RoleId == id);
             }
 
-            List<Role> accounts = (await service.GetList(filters)).ToList();
-            List<RoleModel> models = mappper.Map<List<RoleModel>>(accounts);
+            List<Role> role = (await service.GetList(filters)).ToList();
+            List<RoleModel> models = mappper.Map<List<RoleModel>>(role);
             return models;
         }
 
@@ -45,14 +45,14 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RoleModel>> GetRole(int id)
         {
-            Role account = await service.GetById(id);
+            Role role = await service.GetById(id);
 
-            if (account == null)
+            if (role == null)
             {
                 return NotFound();
             }
 
-            RoleModel model = mappper.Map<RoleModel>(account);
+            RoleModel model = mappper.Map<RoleModel>(role);
 
             return model;
         }
@@ -60,14 +60,14 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRole(int id, Role account)
+        public async Task<IActionResult> PutRole(int id, Role role)
         {
-            if (id != account.RoleId)
+            if (id != role.RoleId)
             {
                 return BadRequest();
             }
 
-            if (!await service.Update(account))
+            if (!await service.Update(role))
             {
                 return NotFound();
             }
@@ -78,13 +78,13 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RoleModel>> PostRole(Role account)
+        public async Task<ActionResult<RoleModel>> PostRole(Role role)
         {
-            if (!await service.Create(account))
+            if (!await service.Create(role))
             {
                 return NotFound();
             }
-            return CreatedAtAction(nameof(GetRoles), new { id = account.RoleId }, account);
+            return CreatedAtAction(nameof(GetRoles), new { id = role.RoleId }, role);
         }
 
         // DELETE: api/TodoItems/5
@@ -98,10 +98,5 @@ namespace Clean.Controllers
 
             return NoContent();
         }
-
-        //private bool CompanyExists(int id)
-        //{
-        //    return _context.Companies.Any(e => e.CompanyId == id);
-        //}
     }
 }

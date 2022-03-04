@@ -62,25 +62,15 @@ namespace Clean
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key))
                 };
             });
-            services.AddSingleton<IJwtAuth>(new Auth(key));
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clean", Version = "v1" });
             });
 
-
-            services.AddAutoMapper(typeof(MapperProfile).Assembly);
-            services.AddSingleton(typeof(IBaseService<Account>), typeof(AccountService));
-            services.AddSingleton(typeof(IBaseService<Company>), typeof(CompanyService));
-            services.AddSingleton(typeof(IAccountService<Account>), typeof(AccountService));
-            services.AddSingleton(typeof(IBaseService<Role>), typeof(RoleService));
-
-            //services.AddScoped(typeof(ICompanyService), typeof(CompanyService));
-
             IConfiguration config = new ConfigurationBuilder()
                                    .SetBasePath(Directory.GetCurrentDirectory())
-                                   .AddJsonFile("appsettings.Development.json", 
+                                   .AddJsonFile("appsettings.Development.json",
                                             optional: true,
                                             reloadOnChange: false)
                                    .Build();
@@ -89,6 +79,11 @@ namespace Clean
                 googleOptions.ClientId = config["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = config["Authentication:Google:ClientSecret"];
             });
+
+
+            services.AddAutoMapper(typeof(MapperProfile).Assembly);
+            services.AddSingleton(typeof(IBaseService<Company>), typeof(CompanyService));
+            services.AddSingleton(typeof(IAccountService<Account>), typeof(AccountService));
             services.AddSingleton(typeof(IBaseService<Employee>), typeof(EmployeeService));
             services.AddSingleton(typeof(IBaseService<HotelMember>), typeof(HotelMemberService));
             services.AddSingleton(typeof(IBaseService<Hotel>), typeof(HotelService));

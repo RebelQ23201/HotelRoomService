@@ -19,14 +19,12 @@ namespace Clean.Controllers
     [ApiController]
     public class AccountsController : Controller
     {
-        private readonly IAccountService<Account> accountService;
-        //private readonly ICompanyService companyService;
+        private readonly IAccountService<Account> service;
         private readonly IMapper mappper;
 
-        //public CompaniesController(IBaseService<Company> companyService, IMapper mappper)
-        public AccountsController(IAccountService<Account> accountService, IMapper mappper)
+        public AccountsController(IAccountService<Account> service, IMapper mappper)
         {
-            this.accountService = accountService;
+            this.service = service;
             this.mappper = mappper;
         }
 
@@ -49,7 +47,7 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<AccountModel>> GetAccount(int id)
         {
-            Account account = await accountService.GetById(id);
+            Account account = await service.GetById(id);
 
             if (account == null)
             {
@@ -83,13 +81,8 @@ namespace Clean.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<AccountModel>> PostAccount(Account account)
-        { if (!await service.Create(account))
         {
-            //_context.Companies.Add(company);
-            //await _context.SaveChangesAsync();
-
-            //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            if (!await accountService.Create(account))
+            if (!await service.Create(account))
             {
                 return NotFound();
             }
@@ -101,21 +94,26 @@ namespace Clean.Controllers
         public async Task<ActionResult<AccountModel>> GetEmail(
             [FromQuery] string tokenid)
         {
+            //get JWT token
             var handler = new JwtSecurityTokenHandler();
             JwtSecurityToken decodedValue = handler.ReadJwtToken(tokenid);
             
+            //get payload, data from the token and turn into json
             JwtPayload payload = decodedValue.Payload;
             var json = payload.SerializeToJson();
 
+            //get each data from the json and get user email
             Dictionary<string?, object> sData = JsonSerializer.Deserialize<Dictionary<string?, object>>(json);
             string email = sData["email"].ToString();
             
-            Account account = await accountService.GetEmail(email);
+            //search email from database
+            Account account = await service.GetEmail(email);
 
+            //if not exist create one and log in as that user
             if (account == null)
             {
-                await accountService.CreateViaSignIn(email);
-                Account accountAfterCreate = await accountService.GetEmail(email);
+                await service.CreateViaSignIn(email);
+                Account accountAfterCreate = await service.GetEmail(email);
                 AccountModel model2 = mappper.Map<AccountModel>(accountAfterCreate);
                 return model2;
             }
@@ -137,10 +135,5 @@ namespace Clean.Controllers
 
             return NoContent();
         }
-
-        //private bool CompanyExists(int id)
-        //{
-        //    return _context.Companies.Any(e => e.CompanyId == id);
-        //}
     }
 }
