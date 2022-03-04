@@ -112,7 +112,7 @@ namespace CleanService.Service
             {
                 using CleanContext context = new CleanContext();
 
-                Account account = await context.Accounts.Where(acc => acc.Email.Equals(email)).FirstOrDefaultAsync();
+                Account account = await context.Accounts.Where(acc => acc.Email.Equals(email)).Include(a=>a.Role).FirstOrDefaultAsync();
 
                 if (account == null)
                 {
