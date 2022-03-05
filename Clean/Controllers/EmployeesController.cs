@@ -28,7 +28,7 @@ namespace Clean.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeOutputModel>>> GetEmployees(
-            [FromQuery] int? id)
+            [FromQuery] int? id, bool? detailed =false)
         {
             Expression<Func<Employee, bool>> filters = c => true;
             if (id != null)
@@ -36,16 +36,16 @@ namespace Clean.Controllers
                 filters = filters.AndAlso(c => c.EmployeeId == id);
             }
 
-            List<Employee> accounts = (await service.GetList(filters)).ToList();
+            List<Employee> accounts = (await service.GetList(filters, detailed)).ToList();
             List<EmployeeOutputModel> models = mappper.Map<List<EmployeeOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EmployeeOutputModel>> GetEmployee(int id)
+        public async Task<ActionResult<EmployeeOutputModel>> GetEmployee(int id, bool? detailed =true)
         {
-            Employee account = await service.GetById(id);
+            Employee account = await service.GetById(id, detailed);
 
             if (account == null)
             {

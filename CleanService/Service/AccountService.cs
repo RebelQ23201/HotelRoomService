@@ -45,7 +45,7 @@ namespace CleanService.Service
                 if (isDeep.HasValue && isDeep.Value)
                 {
                     account = await context.Accounts
-                        .Include(x => x.Role).ThenInclude(x=>x.Accounts)
+                        .Include(x => x.Role)
                         .SingleOrDefaultAsync(x=>x.AccountId==id);
                 }
                 else

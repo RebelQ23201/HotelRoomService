@@ -28,7 +28,7 @@ namespace Clean.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderOutputModel>>> GetOrders(
-            [FromQuery] int? id)
+            [FromQuery] int? id, bool? detailed =false)
         {
             Expression<Func<Order, bool>> filters = c => true;
             if (id != null)
@@ -43,9 +43,9 @@ namespace Clean.Controllers
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderOutputModel>> GetOrder(int id)
+        public async Task<ActionResult<OrderOutputModel>> GetOrder(int id, bool? detailed =true)
         {
-            Order account = await service.GetById(id);
+            Order account = await service.GetById(id, detailed);
 
             if (account == null)
             {

@@ -1,3 +1,4 @@
+using AutoMapper.Internal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +13,12 @@ namespace Clean
     public class Program
     {
         public static void Main(string[] args)
-        {
+{
+            //HttpConfiguration config = GlobalConfiguration.Configuration;
+
+            //config.Formatters.JsonFormatter
+            //            .SerializerSettings
+            //            .ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             CreateHostBuilder(args).Build().Run();
         }
 

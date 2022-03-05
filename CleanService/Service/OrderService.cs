@@ -17,7 +17,19 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Order> list = await context.Orders.Where(query).ToArrayAsync();
+                IEnumerable<Order> list;
+                if (isDeep.HasValue && isDeep.Value)
+                {
+                    list = await context.Orders.Where(query)
+                        .Include(o => o.RoomOrders).ThenInclude(ro=>ro.Room)
+                        .Include(o => o.RoomOrders).ThenInclude(ro=>ro.OrderDetails).ThenInclude(od=>od.Service)
+                        .Include(o => o.RoomOrders).ThenInclude(ro=>ro.OrderDetails).ThenInclude(od=>od.Employee)
+                        .ToArrayAsync();
+                }
+                else
+                {
+                    list = await context.Orders.Where(query).ToArrayAsync();
+                }
                 return list;
             }
             catch (Exception e)
