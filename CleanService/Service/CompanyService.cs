@@ -18,7 +18,18 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Company> list = await context.Companies.Where(query).ToArrayAsync();
+                IEnumerable<Company> list;
+                if (isDeep.HasValue && isDeep.Value)
+                {
+                    list = await context.Companies.Where(query)
+                        .Include(c => c.Employees)
+                        .Include(c=>c.Services)
+                        .ToArrayAsync();
+                }
+                else
+                {
+                    list = await context.Companies.Where(query).ToArrayAsync();
+                }
                 return list;
             }
             catch (Exception e)
@@ -32,7 +43,18 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Company company = await context.Companies.FindAsync(id);
+                Company company;
+                if (isDeep.HasValue && isDeep.Value)
+                {
+                    company = await context.Companies
+                        .Include(c => c.Employees)
+                        .Include(c => c.Services)
+                        .SingleOrDefaultAsync(x=>x.CompanyId==id);
+                }
+                else
+                {
+                    company = await context.Companies.FindAsync(id);
+                }
                 return company;
             }
             catch (Exception e)
@@ -47,6 +69,7 @@ namespace CleanService.Service
             {
                 using CleanContext context = new CleanContext();
                 Company company = await context.Companies.FindAsync(id);
+
                 if (company == null)
                 {
                     return false;

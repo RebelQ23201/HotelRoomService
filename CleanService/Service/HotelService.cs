@@ -17,7 +17,18 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Hotel> list = await context.Hotels.Where(query).ToArrayAsync();
+                IEnumerable<Hotel> list;
+                if (isDeep.HasValue && isDeep.Value)
+                {
+                    list = await context.Hotels.Where(query)
+                        .Include(h => h.RoomTypes)
+                        .ThenInclude(rt=>rt.SystemRoomType)
+                        .ToArrayAsync();
+                }
+                else
+                {
+                    list = await context.Hotels.Where(query).ToArrayAsync();
+                }
                 return list;
             }
             catch (Exception e)
@@ -31,7 +42,18 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Hotel hotel = await context.Hotels.FindAsync(id);
+                Hotel hotel;
+                if (isDeep.HasValue && isDeep.Value)
+                {
+                    hotel = await context.Hotels
+                        .Include(x => x.RoomTypes)
+                        .ThenInclude(rt=>rt.SystemRoomType)
+                        .SingleOrDefaultAsync(x => x.HotelId == id);
+                }
+                else
+                {
+                    hotel = await context.Hotels.FindAsync(id);
+                }
                 return hotel;
             }
             catch (Exception e)

@@ -31,7 +31,7 @@ namespace Clean.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CompanyOutputModel>>> GetCompanies(
-            [FromQuery] int? id, string name, string addr, string phone, string email)
+            [FromQuery] int? id, string name, string addr, string phone, string email, bool? detailed =false)
         {
             Expression<Func<Company, bool>> filters = c => true;
             if (id != null)
@@ -54,16 +54,16 @@ namespace Clean.Controllers
             {
                 filters.AndAlso(c => c.Email == email);
             }
-            List<Company> companies = (await service.GetList(filters)).ToList();
+            List<Company> companies = (await service.GetList(filters, false)).ToList();
             List<CompanyOutputModel> models = mappper.Map<List<CompanyOutputModel>>(companies);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CompanyOutputModel>> GetCompany(int id)
+        public async Task<ActionResult<CompanyOutputModel>> GetCompany(int id, bool? detailed =true)
         {
-            Company company = await service.GetById(id);
+            Company company = await service.GetById(id, detailed);
 
             if (company == null)
             {

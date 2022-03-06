@@ -29,7 +29,7 @@ namespace Clean.Controllers
 
             [HttpGet]
             public async Task<ActionResult<IEnumerable<HotelOutputModel>>> GetHotels(
-                [FromQuery] int? id)
+                [FromQuery] int? id, bool? detailed =false)
             {
                 Expression<Func<Hotel, bool>> filters = c => true;
                 if (id != null)
@@ -37,16 +37,16 @@ namespace Clean.Controllers
                     filters = filters.AndAlso(c => c.HotelId == id);
                 }
 
-                List<Hotel> accounts = (await service.GetList(filters)).ToList();
+                List<Hotel> accounts = (await service.GetList(filters, detailed)).ToList();
                 List<HotelOutputModel> models = mappper.Map<List<HotelOutputModel>>(accounts);
                 return models;
             }
 
             // GET: api/TodoItems/5
             [HttpGet("{id}")]
-            public async Task<ActionResult<HotelOutputModel>> GetHotel(int id)
+            public async Task<ActionResult<HotelOutputModel>> GetHotel(int id, bool? detailed =true)
             {
-                Hotel account = await service.GetById(id);
+                Hotel account = await service.GetById(id, detailed);
 
                 if (account == null)
                 {

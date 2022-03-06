@@ -37,6 +37,7 @@ namespace Clean
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            //.AddJsonOptions(o=>o.JsonSerializerSettings.);
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
