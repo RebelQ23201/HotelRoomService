@@ -11,34 +11,42 @@ namespace Clean.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<CompanyOutputModel, Company>()
+            CreateMap<Company, CompanyOutputModel>()
                 .ReverseMap();
-            CreateMap<EmployeeOutputModel, Employee>()
+            CreateMap<Employee, EmployeeOutputModel>()
                 .ReverseMap();
-            CreateMap<HotelOutputModel, Hotel>()
+            CreateMap<Hotel, HotelOutputModel>()
                 .ReverseMap();
-            CreateMap<OrderDetailOutputModel, OrderDetail>()
+            CreateMap<OrderDetail, OrderDetailOutputModel>()
                             .ReverseMap();
-            CreateMap<OrderOutputModel, Order>()
+            CreateMap<Order, OrderOutputModel>()
                             .ReverseMap();
-            CreateMap<RoomOutputModel, Room>()
+            CreateMap<Room, RoomOutputModel>()
                             .ReverseMap();
-            CreateMap<RoomOrderModel, RoomOrder>()
+            CreateMap<RoomOrderOutputModel, RoomOrderOutputModel>()
                             .ReverseMap();
-            CreateMap<RoomServiceOutputModel, RoomService>()
+            CreateMap<RoomService, RoomServiceOutputModel>()
                             .ReverseMap();
-            CreateMap<RoomTypeOutputModel, RoomType>()
+            CreateMap<RoomType, RoomTypeOutputModel>()
                             .ReverseMap();
-            CreateMap<ServiceOutputModel, Service>()
+            CreateMap<Service, ServiceOutputModel>()
                             .ReverseMap();
-            CreateMap<SystemRoomTypeOutputModel, SystemRoomType>()
+            CreateMap<SystemRoomType, SystemRoomTypeOutputModel>()
                             .ReverseMap();
-            CreateMap<HotelMemberOutputModel, HotelMember>()
+            CreateMap<HotelMember, HotelMemberOutputModel>()
                             .ReverseMap();
-            CreateMap<RoleOutputModel, Role>()
+            CreateMap<Role, RoleOutputModel>()
                             .ReverseMap();
-            CreateMap<AccountOutputModel, Account>()
-                            .ReverseMap();
+            CreateMap<Account, AccountOutputModel>()
+                .ForMember(
+                    dest => dest.Role,
+                    opt => opt.MapFrom(
+                        src => new Role
+                        {
+                            RoleId = src.Role.RoleId,
+                            RoleName = src.Role.RoleName
+                        }))
+                .ReverseMap();
         }
     }
 }

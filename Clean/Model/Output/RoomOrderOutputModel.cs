@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Clean.Model.Output
 {
-    public class RoomOrderModel
+    public class RoomOrderOutputModel
     {
         public int RoomOrderId { get; set; }
         public int? OrderId { get; set; }
