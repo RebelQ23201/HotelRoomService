@@ -21,6 +21,7 @@ using System.Text;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Newtonsoft.Json;
 
 namespace Clean
 {
@@ -81,6 +82,10 @@ namespace Clean
                 googleOptions.ClientSecret = config["Authentication:Google:ClientSecret"];
             });
 
+            services.AddControllersWithViews()
+                    .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
 
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
             services.AddSingleton(typeof(IBaseService<Company>), typeof(CompanyService));

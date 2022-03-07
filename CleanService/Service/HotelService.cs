@@ -27,7 +27,10 @@ namespace CleanService.Service
                 }
                 else
                 {
-                    list = await context.Hotels.Where(query).ToArrayAsync();
+                    list = await context.Hotels.Where(query)
+                        .Include(h => h.RoomTypes)
+                        .ThenInclude(rt => rt.SystemRoomType)
+                        .ToArrayAsync();
                 }
                 return list;
             }

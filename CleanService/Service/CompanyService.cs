@@ -28,7 +28,10 @@ namespace CleanService.Service
                 }
                 else
                 {
-                    list = await context.Companies.Where(query).ToArrayAsync();
+                    list = await context.Companies.Where(query)
+                        .Include(c => c.Employees)
+                        .Include(c => c.Services)
+                        .ToArrayAsync();
                 }
                 return list;
             }
