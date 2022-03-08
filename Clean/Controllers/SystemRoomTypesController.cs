@@ -17,11 +17,11 @@ namespace Clean.Controllers
     [ApiController]
     public class SystemRoomTypesController : Controller
     {
-        private readonly IBaseService<SystemRoomType> service;
+        private readonly ISystemRoomTypeService<SystemRoomType> service;
         private readonly IMapper mappper;
 
         //public CompaniesController(IBaseService<SystemRoomType> accountService, IMapper mappper)
-        public SystemRoomTypesController(IBaseService<SystemRoomType> service, IMapper mappper)
+        public SystemRoomTypesController(ISystemRoomTypeService<SystemRoomType> service, IMapper mappper)
         {
             this.service = service;
             this.mappper = mappper;
@@ -83,17 +83,18 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<SystemRoomTypeOutputModel>> PostSystemRoomType(SystemRoomTypeInputModel account)
+        public async Task<ActionResult<SystemRoomTypeOutputModel>> PostSystemRoomType([FromBody] SystemRoomTypePOSTInputModel model)
         {
+            int id = await service.GetTotal();
             SystemRoomType roomtype = new SystemRoomType();
-            roomtype.SystemRoomTypeId = account.SystemRoomTypeId;
-            roomtype.Name = account.Name;
+            roomtype.SystemRoomTypeId = id;
+            roomtype.Name = model.Name;
 
             if (!await service.Create(roomtype))
             {
                 return NotFound();
             }
-            return CreatedAtAction(nameof(GetSystemRoomTypes), new { id = account.SystemRoomTypeId }, account);
+            return CreatedAtAction(nameof(GetSystemRoomTypes), new { id = id }, roomtype);
         }
 
         // DELETE: api/TodoItems/5

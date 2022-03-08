@@ -101,7 +101,7 @@ namespace Clean
             services.AddSingleton(typeof(IBaseService<RoomService>), typeof(RoomServiceService));
             services.AddSingleton(typeof(IBaseService<RoomType>), typeof(RoomTypeService));
             services.AddSingleton(typeof(IBaseService<Service>), typeof(ServiceService));
-            services.AddSingleton(typeof(IBaseService<SystemRoomType>), typeof(SystemRoomTypeService));
+            services.AddSingleton(typeof(ISystemRoomTypeService<SystemRoomType>), typeof(SystemRoomTypeService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

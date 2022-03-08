@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class SystemRoomTypeService : IBaseService<SystemRoomType>
+    public class SystemRoomTypeService : ISystemRoomTypeService<SystemRoomType>
     {
         public async Task<IEnumerable<SystemRoomType>> GetList(Expression<Func<SystemRoomType, bool>> query, bool? isDeep)
         {
@@ -73,8 +73,9 @@ namespace CleanService.Service
                 {
                     return false;
                 }
+                systemRoomType.Name = c.Name;
                 context.Entry(systemRoomType).State = EntityState.Modified;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
@@ -103,6 +104,14 @@ namespace CleanService.Service
                 throw new Exception(e.Message);
             }
             return false;
+        }
+
+        public async Task<int> GetTotal()
+        {
+            using CleanContext context = new CleanContext();
+            IEnumerable<SystemRoomType> list = await context.SystemRoomTypes.ToListAsync();
+            int total = list.Count();
+            return total;
         }
     }
 }
