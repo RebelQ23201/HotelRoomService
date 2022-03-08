@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Model.Input;
 using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
@@ -60,14 +61,18 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSystemRoomType(int id, SystemRoomType account)
+        public async Task<IActionResult> PutSystemRoomType(int id, SystemRoomTypeInputModel account)
         {
             if (id != account.SystemRoomTypeId)
             {
                 return BadRequest();
             }
 
-            if (!await service.Update(account))
+            SystemRoomType roomtype = new SystemRoomType();
+            roomtype.SystemRoomTypeId = account.SystemRoomTypeId;
+            roomtype.Name = account.Name;
+
+            if (!await service.Update(roomtype))
             {
                 return NotFound();
             }
@@ -78,9 +83,13 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<SystemRoomTypeOutputModel>> PostSystemRoomType(SystemRoomType account)
+        public async Task<ActionResult<SystemRoomTypeOutputModel>> PostSystemRoomType(SystemRoomTypeInputModel account)
         {
-            if (!await service.Create(account))
+            SystemRoomType roomtype = new SystemRoomType();
+            roomtype.SystemRoomTypeId = account.SystemRoomTypeId;
+            roomtype.Name = account.Name;
+
+            if (!await service.Create(roomtype))
             {
                 return NotFound();
             }
