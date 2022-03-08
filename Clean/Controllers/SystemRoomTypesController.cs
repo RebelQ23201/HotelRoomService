@@ -87,7 +87,7 @@ namespace Clean.Controllers
         {
             int id = await service.GetTotal();
             SystemRoomType roomtype = new SystemRoomType();
-            roomtype.SystemRoomTypeId = id;
+            roomtype.SystemRoomTypeId = id + 1;
             roomtype.Name = model.Name;
 
             if (!await service.Create(roomtype))
