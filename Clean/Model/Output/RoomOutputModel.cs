@@ -14,6 +14,6 @@ namespace Clean.Model.Output
 
         public virtual HotelOutputModel Hotel { get; set; }
         public virtual RoomTypeOutputModel RoomType { get; set; }
-        public virtual List<RoomOrderModel> RoomOrders { get; set; }
+        public virtual List<RoomOrderOutputModel> RoomOrders { get; set; }
     }
 }

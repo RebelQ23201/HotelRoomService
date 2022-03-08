@@ -11,6 +11,6 @@ namespace Clean.Model.Output
         public int RoleId { get; set; }
         public string RoleName { get; set; }
 
-        //public virtual ICollection<AccountModel> Accounts { get; set; }
+        public virtual ICollection<AccountOutputModel> Accounts { get; set; }
     }
 }

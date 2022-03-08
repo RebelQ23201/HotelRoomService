@@ -27,7 +27,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoomOrderModel>>> GetRoomOrders(
+        public async Task<ActionResult<IEnumerable<RoomOrderOutputModel>>> GetRoomOrders(
             [FromQuery] int? id)
         {
             Expression<Func<RoomOrder, bool>> filters = c => true;
@@ -37,13 +37,13 @@ namespace Clean.Controllers
             }
 
             List<RoomOrder> accounts = (await service.GetList(filters)).ToList();
-            List<RoomOrderModel> models = mappper.Map<List<RoomOrderModel>>(accounts);
+            List<RoomOrderOutputModel> models = mappper.Map<List<RoomOrderOutputModel>>(accounts);
             return models;
         }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RoomOrderModel>> GetRoomOrder(int id)
+        public async Task<ActionResult<RoomOrderOutputModel>> GetRoomOrder(int id)
         {
             RoomOrder account = await service.GetById(id);
 
@@ -52,7 +52,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            RoomOrderModel model = mappper.Map<RoomOrderModel>(account);
+            RoomOrderOutputModel model = mappper.Map<RoomOrderOutputModel>(account);
 
             return model;
         }
@@ -78,7 +78,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RoomOrderModel>> PostRoomOrder(RoomOrder account)
+        public async Task<ActionResult<RoomOrderOutputModel>> PostRoomOrder(RoomOrder account)
         {
             if (!await service.Create(account))
             {

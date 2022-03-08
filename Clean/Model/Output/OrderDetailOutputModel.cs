@@ -15,7 +15,7 @@ namespace Clean.Model.Output
         public int? Quantity { get; set; }
 
         public virtual EmployeeOutputModel Employee { get; set; }
-        public virtual RoomOrderModel RoomOrder { get; set; }
+        public virtual RoomOrderOutputModel RoomOrder { get; set; }
         public virtual ServiceOutputModel Service { get; set; }
     }
 }
