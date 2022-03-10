@@ -58,6 +58,35 @@ namespace Clean.Controllers
             List<CompanyOutputModel> models = mappper.Map<List<CompanyOutputModel>>(companies);
             return models;
         }
+        [HttpGet("Ids")]
+        public async Task<ActionResult<IEnumerable<int>>> GetId(
+            [FromQuery] int? id, string name, string addr, string phone, string email, bool? detailed = false)
+        {
+            Expression<Func<Company, bool>> filters = c => true;
+            if (id != null)
+            {
+                filters = filters.AndAlso(c => c.CompanyId == id);
+            }
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                filters = filters.AndAlso(c => c.Name == name);
+            }
+            if (!string.IsNullOrWhiteSpace(addr))
+            {
+                filters = filters.AndAlso(c => c.Address == addr);
+            }
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                filters = filters.AndAlso(c => c.Phone == phone);
+            }
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                filters.AndAlso(c => c.Email == email);
+            }
+            var companies = (await service.GetList(filters, false));
+            List<int> models = companies.Select(c => c.CompanyId).ToList();
+            return models;
+        }
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]

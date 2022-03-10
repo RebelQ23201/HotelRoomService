@@ -28,16 +28,88 @@ namespace Clean.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderOutputModel>>> GetOrders(
-            [FromQuery] int? id, bool? detailed =false)
+            [FromQuery] int? OrderId, int? HotelId, int? CompanyId, string Name,
+            DateTime? StartDate, DateTime? EndDate, DateTime? isActiveDate,
+            int? Status, bool? detailed = false)
         {
             Expression<Func<Order, bool>> filters = c => true;
-            if (id != null)
+            if (OrderId != null)
             {
-                filters = filters.AndAlso(c => c.OrderId == id);
+                filters = filters.AndAlso(c => c.OrderId == OrderId);
             }
-
+            if (HotelId != null)
+            {
+                filters = filters.AndAlso(c => c.HotelId == HotelId);
+            }
+            if (CompanyId != null)
+            {
+                filters = filters.AndAlso(c => c.OrderId == CompanyId);
+            }
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                filters = filters.AndAlso(c => c.Name == Name);
+            }
+            if (StartDate != null)
+            {
+                filters = filters.AndAlso(c => c.StartDate == StartDate);
+            }
+            if (EndDate != null)
+            {
+                filters = filters.AndAlso(c => c.EndDate == EndDate);
+            }
+            if (isActiveDate != null)
+            {
+                filters = filters.AndAlso(c => c.StartDate <= isActiveDate && c.EndDate >= isActiveDate);
+            }
+            if (Status != null)
+            {
+                filters = filters.AndAlso(c => c.Status == Status);
+            }
             List<Order> accounts = (await service.GetList(filters, detailed)).ToList();
             List<OrderOutputModel> models = mappper.Map<List<OrderOutputModel>>(accounts);
+            return models;
+        }
+        [HttpGet("Ids")]
+        public async Task<ActionResult<IEnumerable<int>>> GetIds(
+           [FromQuery] int? OrderId, int? HotelId, int? CompanyId, string Name,
+           DateTime? StartDate, DateTime? EndDate, DateTime? isActiveDate,
+           int? Status, bool? detailed = false)
+        {
+            Expression<Func<Order, bool>> filters = c => true;
+            if (OrderId != null)
+            {
+                filters = filters.AndAlso(c => c.OrderId == OrderId);
+            }
+            if (HotelId != null)
+            {
+                filters = filters.AndAlso(c => c.HotelId == HotelId);
+            }
+            if (CompanyId != null)
+            {
+                filters = filters.AndAlso(c => c.OrderId == CompanyId);
+            }
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                filters = filters.AndAlso(c => c.Name == Name);
+            }
+            if (StartDate != null)
+            {
+                filters = filters.AndAlso(c => c.StartDate == StartDate);
+            }
+            if (EndDate != null)
+            {
+                filters = filters.AndAlso(c => c.EndDate == EndDate);
+            }
+            if (isActiveDate != null)
+            {
+                filters = filters.AndAlso(c => c.StartDate <= isActiveDate && c.EndDate >= isActiveDate);
+            }
+            if (Status != null)
+            {
+                filters = filters.AndAlso(c => c.Status == Status);
+            }
+           var accounts = (await service.GetList(filters, detailed));
+            List<int> models = accounts.Select(a=>a.OrderId).ToList();
             return models;
         }
 
