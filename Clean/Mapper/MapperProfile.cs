@@ -19,8 +19,7 @@ namespace Clean.Mapper
                 .ReverseMap();
             CreateMap<OrderDetail, OrderDetailOutputModel>()
                             .ReverseMap();
-            CreateMap<Order, OrderOutputModel>()
-                            .ReverseMap();
+            
             CreateMap<Room, RoomOutputModel>()
                             .ReverseMap();
             CreateMap<RoomOrderOutputModel, RoomOrderOutputModel>()
@@ -37,6 +36,27 @@ namespace Clean.Mapper
                             .ReverseMap();
             CreateMap<Role, RoleOutputModel>()
                             .ReverseMap();
+            CreateMap<Order, OrderOutputModel>()
+                .ForMember(
+                dest=>dest.RoomOrders,
+                opt=>opt.MapFrom(
+                    src=> src.RoomOrders.Select(ro=>new RoomOrderOutputModel { 
+                        Room = new RoomOutputModel { RoomId = ro.Room.RoomId, HotelId=ro.Room.HotelId, Name=ro.Room.Name, RoomTypeId=ro.Room.RoomTypeId },
+                        OrderDetails = ro.OrderDetails.Select(od=>new OrderDetailOutputModel
+                        {
+                            ServiceId=od.ServiceId,
+                            Service=new ServiceOutputModel { CompanyId=od.Service.CompanyId, ServiceId= od.ServiceId.Value,
+                                Name= od.Service.Name, Price= od.Service.Price},
+                            Quantity=od.Quantity,
+                            EmployeeId=od.EmployeeId,
+                            Employee=new EmployeeOutputModel { EmployeeId= od.EmployeeId.Value, Name=od.Employee.Name,
+                                Phone=od.Employee.Phone, Status=od.Employee.Status, Address=od.Employee.Address},
+                            Price=od.Price
+                        }).ToList()
+                    })
+                    )
+                )
+                .ReverseMap();
             CreateMap<Account, AccountOutputModel>()
                 .ForMember(
                     dest => dest.Role,

@@ -36,7 +36,7 @@ namespace Clean.Controllers
                 filters = filters.AndAlso(c => c.OrderId == id);
             }
 
-            List<Order> accounts = (await service.GetList(filters)).ToList();
+            List<Order> accounts = (await service.GetList(filters, detailed)).ToList();
             List<OrderOutputModel> models = mappper.Map<List<OrderOutputModel>>(accounts);
             return models;
         }
