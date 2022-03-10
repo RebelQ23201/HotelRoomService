@@ -17,11 +17,11 @@ namespace Clean.Controllers
         [ApiController]
         public class HotelsController : Controller
         {
-            private readonly IBaseService<Hotel> service;
+            private readonly IHotelService<Hotel> service;
             private readonly IMapper mappper;
 
             //public CompaniesController(IBaseService<Hotel> accountService, IMapper mappper)
-            public HotelsController(IBaseService<Hotel> service, IMapper mappper)
+            public HotelsController(IHotelService<Hotel> service, IMapper mappper)
             {
                 this.service = service;
                 this.mappper = mappper;

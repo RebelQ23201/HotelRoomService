@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class HotelService : IBaseService<Hotel>
+    public class HotelService : IHotelService<Hotel>
     {
         public async Task<IEnumerable<Hotel>> GetList(Expression<Func<Hotel, bool>> query, bool? isDeep)
         {
@@ -130,6 +130,29 @@ namespace CleanService.Service
                 throw new Exception(e.Message);
             }
             return false;
+        }
+
+        public async Task<Hotel> GetEmail(string email)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+
+                Hotel hotel = await context.Hotels.Where(acc => acc.Email.Equals(email)).FirstOrDefaultAsync();
+
+                if (hotel == null)
+                {
+                    return null;
+                }
+
+
+                return hotel;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return null;
         }
     }
 }

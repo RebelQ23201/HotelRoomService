@@ -88,11 +88,11 @@ namespace Clean
                 );
 
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
-            services.AddSingleton(typeof(IBaseService<Company>), typeof(CompanyService));
+            services.AddSingleton(typeof(ICompanyService<Company>), typeof(CompanyService));
             services.AddSingleton(typeof(IAccountService<Account>), typeof(AccountService));
             services.AddSingleton(typeof(IBaseService<Employee>), typeof(EmployeeService));
             services.AddSingleton(typeof(IBaseService<HotelMember>), typeof(HotelMemberService));
-            services.AddSingleton(typeof(IBaseService<Hotel>), typeof(HotelService));
+            services.AddSingleton(typeof(IHotelService<Hotel>), typeof(HotelService));
             services.AddSingleton(typeof(IBaseService<OrderDetail>), typeof(OrderDetailService));
             services.AddSingleton(typeof(IBaseService<Order>), typeof(OrderService));
             services.AddSingleton(typeof(IBaseService<Role>), typeof(RoleService));

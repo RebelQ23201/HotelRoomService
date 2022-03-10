@@ -20,11 +20,16 @@ namespace Clean.Controllers
     public class AccountsController : Controller
     {
         private readonly IAccountService<Account> service;
+        private readonly ICompanyService<Company> CompanyService;
+        private readonly IHotelService<Hotel> HotelService;
+
         private readonly IMapper mappper;
 
-        public AccountsController(IAccountService<Account> service, IMapper mappper)
+        public AccountsController(IAccountService<Account> service, ICompanyService<Company> CompanyService, IHotelService<Hotel> HotelService, IMapper mappper)
         {
             this.service = service;
+            this.CompanyService = CompanyService;
+            this.HotelService = HotelService;
             this.mappper = mappper;
         }
 
@@ -91,7 +96,7 @@ namespace Clean.Controllers
         
         [Route("SignInWithGoogle")]
         [HttpGet()]
-        public async Task<ActionResult<AccountOutputModel>> GetEmail(
+        public async Task<ActionResult<EmailAccountOutputModel>> GetEmail(
             [FromQuery] string tokenid)
         {
             //get JWT token
@@ -114,12 +119,37 @@ namespace Clean.Controllers
             {
                 await service.CreateViaSignIn(email);
                 Account accountAfterCreate = await service.GetEmail(email);
-                AccountOutputModel model2 = mappper.Map<AccountOutputModel>(accountAfterCreate);
+                EmailAccountOutputModel model2 = new EmailAccountOutputModel();
+                model2.AccountId = accountAfterCreate.AccountId;
+                model2.Email = accountAfterCreate.Email;
+                model2.RoleId = accountAfterCreate.RoleId;
+                model2.CompanyId = null;
+                model2.HotelId = null;
                 return model2;
             }
 
-            AccountOutputModel model = mappper.Map<AccountOutputModel>(account);
-
+            EmailAccountOutputModel model = new EmailAccountOutputModel();
+            model.AccountId = account.AccountId;
+            model.Email = account.Email;
+            model.RoleId = account.RoleId;
+            Company company = await CompanyService.GetEmail(email);
+            Hotel hotel = await HotelService.GetEmail(email);
+            if (company == null)
+            {
+                model.CompanyId = null;
+            }
+            else
+            {
+                model.CompanyId = company.CompanyId;
+            }
+            if (hotel == null)
+            {
+                model.HotelId = null;
+            }
+            else
+            {
+                model.HotelId = hotel.HotelId;
+            }
             return model;
         }
         

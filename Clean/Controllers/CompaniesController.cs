@@ -19,11 +19,11 @@ namespace Clean.Controllers
     [ApiController]
     public class CompaniesController : Controller
     {
-        private readonly IBaseService<Company> service;
+        private readonly ICompanyService<Company> service;
         private readonly IMapper mappper;
 
         //public CompaniesController(IBaseService<Company> companyService, IMapper mappper)
-        public CompaniesController(IBaseService<Company> service, IMapper mappper)
+        public CompaniesController(ICompanyService<Company> service, IMapper mappper)
         {
             this.service = service;
             this.mappper = mappper;

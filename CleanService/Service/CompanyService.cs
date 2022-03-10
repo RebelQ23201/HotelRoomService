@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class CompanyService : IBaseService<Company>
+    public class CompanyService : ICompanyService<Company>
     {
         public async Task<IEnumerable<Company>> GetList(Expression<Func<Company, bool>> query, bool? isDeep)
         {
@@ -132,6 +132,28 @@ namespace CleanService.Service
                 throw new Exception(e.Message);
             }
             return false;
+        }
+        public async Task<Company> GetEmail(string email)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+
+                Company company = await context.Companies.Where(acc => acc.Email.Equals(email)).FirstOrDefaultAsync();
+
+                if (company == null)
+                {
+                    return null;
+                }
+
+
+                return company;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return null;
         }
     }
 }
