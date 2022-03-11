@@ -117,15 +117,7 @@ namespace Clean.Controllers
             //if not exist create one and log in as that user
             if (account == null)
             {
-                await service.CreateViaSignIn(email);
-                Account accountAfterCreate = await service.GetEmail(email);
-                EmailAccountOutputModel model2 = new EmailAccountOutputModel();
-                model2.AccountId = accountAfterCreate.AccountId;
-                model2.Email = accountAfterCreate.Email;
-                model2.RoleId = accountAfterCreate.RoleId;
-                model2.CompanyId = null;
-                model2.HotelId = null;
-                return model2;
+                return Unauthorized();
             }
 
             EmailAccountOutputModel model = new EmailAccountOutputModel();
