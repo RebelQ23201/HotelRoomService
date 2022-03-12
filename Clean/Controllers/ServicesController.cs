@@ -113,7 +113,8 @@ namespace Clean.Controllers
         }
 
         // DELETE: api/TodoItems/5
-        [HttpDelete("")]
+        [HttpDelete()]
+        [Route("Company")]
         public async Task<IActionResult> DeleteByCompany(int id, int companyId)
         {
             if (!await service.DeleteByCompany(id, companyId))
