@@ -100,6 +100,10 @@ namespace CleanService.Service
                 {
                     return false;
                 }
+                company.Name = c.Name;
+                company.Address = c.Address;
+                company.Phone = c.Phone;
+                company.Email = c.Email;
                 context.Entry(company).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;

@@ -90,7 +90,7 @@ namespace Clean
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
             services.AddSingleton(typeof(ICompanyService<Company>), typeof(CompanyService));
             services.AddSingleton(typeof(IAccountService<Account>), typeof(AccountService));
-            services.AddSingleton(typeof(IBaseService<Employee>), typeof(EmployeeService));
+            services.AddSingleton(typeof(IEmployeeService<Employee>), typeof(EmployeeService));
             services.AddSingleton(typeof(IBaseService<HotelMember>), typeof(HotelMemberService));
             services.AddSingleton(typeof(IHotelService<Hotel>), typeof(HotelService));
             services.AddSingleton(typeof(IBaseService<OrderDetail>), typeof(OrderDetailService));
@@ -100,7 +100,7 @@ namespace Clean
             services.AddSingleton(typeof(IBaseService<RoomOrder>), typeof(RoomOrderService));
             services.AddSingleton(typeof(IBaseService<RoomService>), typeof(RoomServiceService));
             services.AddSingleton(typeof(IBaseService<RoomType>), typeof(RoomTypeService));
-            services.AddSingleton(typeof(IBaseService<Service>), typeof(ServiceService));
+            services.AddSingleton(typeof(IServiceService<Service>), typeof(ServiceService));
             services.AddSingleton(typeof(ISystemRoomTypeService<SystemRoomType>), typeof(SystemRoomTypeService));
         }
 

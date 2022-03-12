@@ -77,7 +77,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Content("Update Service System Room type id = " + id + " Successfully");
         }
 
         // POST: api/TodoItems
@@ -87,7 +87,7 @@ namespace Clean.Controllers
         {
             int id = await service.GetTotal();
             SystemRoomType roomtype = new SystemRoomType();
-            roomtype.SystemRoomTypeId = id + 1;
+            roomtype.SystemRoomTypeId = id++;
             roomtype.Name = model.Name;
 
             if (!await service.Create(roomtype))
@@ -106,7 +106,7 @@ namespace Clean.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Content("Delete Service System Room type id = " + id + " Successfully");
         }
     }
 }

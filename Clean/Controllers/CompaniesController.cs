@@ -12,6 +12,7 @@ using CleanService.Service;
 using CleanService.DBContext;
 using System.Linq.Expressions;
 using Clean.Util;
+using Clean.Model.Input;
 
 namespace Clean.Controllers
 {
@@ -107,37 +108,26 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(int id, Company company)
+        public async Task<IActionResult> PutCompany(int id, CompanyInputModel companyInput)
         {
-            if (id != company.CompanyId)
+            if (id != companyInput.CompanyId)
             {
                 return BadRequest();
             }
 
-            //_context.Entry(company).State = EntityState.Modified;
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!CompanyExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+            Company company = new Company();
+            company.CompanyId = companyInput.CompanyId;
+            company.Name = companyInput.Name;
+            company.Address = companyInput.Address;
+            company.Phone = companyInput.Phone;
+            company.Email = companyInput.Email;
 
             if (!await service.Update(company))
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return Content("Update success");
         }
 
         // POST: api/TodoItems
