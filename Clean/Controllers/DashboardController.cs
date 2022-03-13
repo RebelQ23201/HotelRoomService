@@ -28,9 +28,9 @@ namespace Clean.Controllers
         {
             int hotelCount = await HotelService.Count((h=>true));
             int companyCount = await CompanyService.Count((c=>true));
-            int countTodayOrder = await OrderService.Count((o=>true));
+            int countAllOrder = await OrderService.Count((o=>true));
             DateTime today = DateTime.Now.Date;
-            int countAllOrder = await OrderService.Count((c => c.StartDate.Value.Date <= today && c.EndDate.Value.Date >= today));
+            int countTodayOrder = await OrderService.Count((c => c.StartDate.Value.Date <= today && c.EndDate.Value.Date >= today));
             return new { hotel = hotelCount, company = companyCount, todayOrders = countTodayOrder, totalOrders = countAllOrder };
         }
 
