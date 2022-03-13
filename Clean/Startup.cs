@@ -96,10 +96,10 @@ namespace Clean
             services.AddSingleton(typeof(IBaseService<OrderDetail>), typeof(OrderDetailService));
             services.AddSingleton(typeof(IBaseService<Order>), typeof(OrderService));
             services.AddSingleton(typeof(IBaseService<Role>), typeof(RoleService));
-            services.AddSingleton(typeof(IBaseService<Room>), typeof(RoomManagementService));
+            services.AddSingleton(typeof(IRoomService<Room>), typeof(RoomManagementService));
             services.AddSingleton(typeof(IBaseService<RoomOrder>), typeof(RoomOrderService));
             services.AddSingleton(typeof(IBaseService<RoomService>), typeof(RoomServiceService));
-            services.AddSingleton(typeof(IBaseService<RoomType>), typeof(RoomTypeService));
+            services.AddSingleton(typeof(IRoomTypeService<RoomType>), typeof(RoomTypeService));
             services.AddSingleton(typeof(IServiceService<Service>), typeof(ServiceService));
             services.AddSingleton(typeof(ISystemRoomTypeService<SystemRoomType>), typeof(SystemRoomTypeService));
         }

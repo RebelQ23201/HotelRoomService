@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Model.Input;
 using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
@@ -16,11 +17,11 @@ namespace Clean.Controllers
     [ApiController]
     public class RoomsController : Controller
     {
-        private readonly IBaseService<Room> service;
+        private readonly IRoomService<Room> service;
         private readonly IMapper mappper;
 
         //public CompaniesController(IBaseService<Room> accountService, IMapper mappper)
-        public RoomsController(IBaseService<Room> service, IMapper mappper)
+        public RoomsController(IRoomService<Room> service, IMapper mappper)
         {
             this.service = service;
             this.mappper = mappper;
@@ -78,13 +79,19 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RoomOutputModel>> PostRoom(Room account)
+        public async Task<ActionResult<RoomOutputModel>> PostRoom([FromBody] RoomPostInputModel roomInput)
         {
-            if (!await service.Create(account))
+            int id = await service.GetTotal();
+            Room model = new Room();
+            model.RoomId = id + 1;
+            model.HotelId = roomInput.HotelId;
+            model.Name = roomInput.Name;
+            model.RoomTypeId = roomInput.RoomTypeId;
+            if (!await service.Create(model))
             {
                 return NotFound();
             }
-            return CreatedAtAction(nameof(GetRooms), new { id = account.RoomId }, account);
+            return CreatedAtAction(nameof(GetRooms), new { id = id + 1 }, model);
         }
 
         // DELETE: api/TodoItems/5
@@ -97,6 +104,60 @@ namespace Clean.Controllers
             }
 
             return NoContent();
+        }
+
+        [Route("Hotel")]
+        [HttpGet()]
+        public async Task<ActionResult<IEnumerable<RoomOutputModel>>> GetRoomByHotelId(int id)
+        {
+            IEnumerable<Room> rooms = await service.GetRoomByHotelId(id);
+
+            if (rooms == null)
+            {
+                return NotFound();
+            }
+
+            List<RoomOutputModel> models = mappper.Map<List<RoomOutputModel>>(rooms);
+            //ServiceOutputModel model = mappper.Map<ServiceOutputModel>(account);
+
+            return models;
+        }
+
+        // PUT: api/TodoItems/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut()]
+        [Route("Hotel")]
+        public async Task<IActionResult> EditRoom(int id, int hotelId, RoomInputModel room)
+        {
+            if (id != room.RoomId)
+            {
+                return BadRequest();
+            }
+
+            Room model = new Room();
+            model.RoomId = id;
+            model.HotelId = room.HotelId;
+            model.Name = room.Name;
+            model.RoomTypeId = room.RoomTypeId;
+
+            if (!await service.UpdateByHotel(hotelId, model))
+            {
+                return NotFound();
+            }
+
+            return Content("Update Room id " + id + " Successfully");
+        }
+
+        [HttpDelete()]
+        [Route("Hotel")]
+        public async Task<IActionResult> DeleteByHotel(int id, int hotelId)
+        {
+            if (!await service.DeleteByHotel(id, hotelId))
+            {
+                return NotFound();
+            }
+
+            return Content("Delete Room id " + id + " Successfully");
         }
     }
 }

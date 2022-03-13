@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class RoomManagementService : IBaseService<Room>
+    public class RoomManagementService : IRoomService<Room>
     {
         public async Task<IEnumerable<Room>> GetList(Expression<Func<Room, bool>> query, bool? isDeep)
         {
@@ -111,6 +111,74 @@ namespace CleanService.Service
                     return false;
                 }
                 context.Rooms.AddAsync(c);
+                context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return false;
+        }
+
+        public async Task<bool> DeleteByHotel(int roomId, int hotelId)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+                Room room = await context.Rooms.FindAsync(roomId);
+                if (room == null || !room.HotelId.Equals(hotelId))
+                {
+                    return false;
+                }
+                context.Rooms.Remove(room);
+                context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return false;
+        }
+
+        public async Task<IEnumerable<Room>> GetRoomByHotelId(int hotelId)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+                IEnumerable<Room> rooms = await context.Rooms.Where(s => s.HotelId == hotelId).Include(r => r.RoomType).ToArrayAsync();
+                return rooms;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return null;
+        }
+
+        public async Task<int> GetTotal()
+        {
+            using CleanContext context = new CleanContext();
+            IEnumerable<Room> list = await context.Rooms.ToListAsync();
+            int total = list.Count();
+            return total;
+        }
+
+        public async Task<bool> UpdateByHotel(int hotelId, Room c)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+                Room room = await context.Rooms.FindAsync(c.RoomId);
+                if (room == null || !room.HotelId.Equals(hotelId) || !room.HotelId.Equals(c.HotelId))
+                {
+                    return false;
+                }
+                room.RoomTypeId = c.RoomTypeId;
+                room.Name = c.Name;
+                room.RoomTypeId = c.RoomTypeId;
+                context.Entry(room).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
             }
