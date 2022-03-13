@@ -41,6 +41,21 @@ namespace CleanService.Service
             }
             return new List<Company>();
         }
+
+        public async Task<int> Count(Expression<Func<Company, bool>> query)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+
+                return context.Companies.Where(query).Count();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return 0;
+        }
         public async Task<Company> GetById(int id, bool? isDeep)
         {
             try

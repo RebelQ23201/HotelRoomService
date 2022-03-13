@@ -26,6 +26,20 @@ namespace CleanService.Service
             }
             return new List<Role>();
         }
+        public async Task<int> Count(Expression<Func<Role, bool>> query)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+
+                return context.Roles.Where(query).Count();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return 0;
+        }
         public async Task<Role> GetById(int id, bool? isDeep)
         {
             try

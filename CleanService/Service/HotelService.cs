@@ -40,6 +40,20 @@ namespace CleanService.Service
             }
             return new List<Hotel>();
         }
+        public async Task<int> Count(Expression<Func<Hotel, bool>> query)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+
+                return context.Hotels.Where(query).Count();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return 0;
+        }
         public async Task<Hotel> GetById(int id, bool? isDeep)
         {
             try
