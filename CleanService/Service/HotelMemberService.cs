@@ -40,6 +40,20 @@ namespace CleanService.Service
             }
             return null;
         }
+        public async Task<int> Count(Expression<Func<HotelMember, bool>> query)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+
+                return context.HotelMembers.Where(query).Count();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return 0;
+        }
         public async Task<bool> Delete(int id)
         {
             try

@@ -27,6 +27,20 @@ namespace CleanService.Service
             }
             return new List<RoomService>();
         }
+        public async Task<int> Count(Expression<Func<RoomService, bool>> query)
+        {
+            try
+            {
+                using CleanContext context = new CleanContext();
+
+                return context.RoomServices.Where(query).Count();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return 0;
+        }
         public async Task<RoomService> GetById(int id, bool? isDeep)
         {
             try
