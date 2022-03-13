@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Model.Input;
 using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
@@ -61,19 +62,26 @@ namespace Clean.Controllers
             // PUT: api/TodoItems/5
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPut("{id}")]
-            public async Task<IActionResult> PutHotel(int id, Hotel account)
+            public async Task<IActionResult> PutHotel(int id, HotelInputModel hotel)
             {
-                if (id != account.HotelId)
+                if (id != hotel.HotelId)
                 {
                     return BadRequest();
                 }
 
-                if (!await service.Update(account))
-                {
-                    return NotFound();
-                }
+                Hotel model = new Hotel();
+                model.HotelId = id;
+                model.Name = hotel.Name;
+                model.Address = hotel.Address;
+                model.Phone = hotel.Phone;
+                model.Email = hotel.Email;
 
-                return NoContent();
+                if (!await service.Update(model))
+                    {
+                        return NotFound();
+                    }
+
+                return Content("Update success");
             }
 
             // POST: api/TodoItems

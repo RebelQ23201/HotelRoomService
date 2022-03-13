@@ -154,7 +154,7 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                IEnumerable<Employee> employees = await context.Employees.Where(s => s.CompanyId == companyId).ToArrayAsync();
+                IEnumerable<Employee> employees = await context.Employees.Where(s => s.CompanyId == companyId && s.Status == 1).ToArrayAsync();
                 return employees;
             }
             catch (Exception e)

@@ -98,6 +98,10 @@ namespace CleanService.Service
                 {
                     return false;
                 }
+                hotel.Name = c.Name;
+                hotel.Address = c.Address;
+                hotel.Phone = c.Phone;
+                hotel.Email = c.Email;
                 context.Entry(hotel).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
