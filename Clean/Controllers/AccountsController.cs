@@ -12,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Text.Json;
+using Clean.Filter;
 
 namespace Clean.Controllers
 {
@@ -25,6 +26,7 @@ namespace Clean.Controllers
 
         private readonly IMapper mappper;
 
+        
         public AccountsController(IAccountService<Account> service, ICompanyService<Company> CompanyService, IHotelService<Hotel> HotelService, IMapper mappper)
         {
             this.service = service;
@@ -34,6 +36,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
+        [TokenAuthenticationFilter]
         public async Task<ActionResult<IEnumerable<AccountOutputModel>>> GetAccounts(
             [FromQuery] int? id, bool? detailed=false)
         {
@@ -98,7 +101,7 @@ namespace Clean.Controllers
         [HttpGet()]
         public async Task<ActionResult<EmailAccountOutputModel>> GetEmail(
             [FromQuery] string tokenid)
-        {
+        {   
             //get JWT token
             var handler = new JwtSecurityTokenHandler();
             JwtSecurityToken decodedValue = handler.ReadJwtToken(tokenid);
@@ -110,7 +113,7 @@ namespace Clean.Controllers
             //get each data from the json and get user email
             Dictionary<string?, object> sData = JsonSerializer.Deserialize<Dictionary<string?, object>>(json);
             string email = sData["email"].ToString();
-            
+
             //search email from database
             Account account = await service.GetEmail(email);
 
