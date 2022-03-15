@@ -45,7 +45,7 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                RoomType roomType = await context.RoomTypes.FindAsync(id);
+                RoomType roomType = await context.RoomTypes.Where(rt => rt.RoomTypeId == id).Include(rt => rt.SystemRoomType).FirstAsync();
                 return roomType;
             }
             catch (Exception e)
