@@ -12,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Text.Json;
+using Clean.Filter;
 
 namespace Clean.Controllers
 {
@@ -25,6 +26,7 @@ namespace Clean.Controllers
 
         private readonly IMapper mappper;
 
+        
         public AccountsController(IAccountService<Account> service, ICompanyService<Company> CompanyService, IHotelService<Hotel> HotelService, IMapper mappper)
         {
             this.service = service;
@@ -34,6 +36,7 @@ namespace Clean.Controllers
         }
 
         [HttpGet]
+        [TokenAuthenticationFilter]
         public async Task<ActionResult<IEnumerable<AccountOutputModel>>> GetAccounts(
             [FromQuery] int? id, bool? detailed=false)
         {
@@ -99,6 +102,14 @@ namespace Clean.Controllers
         public async Task<ActionResult<EmailAccountOutputModel>> GetEmail(
             [FromQuery] string tokenid)
         {
+            /*var result = true;
+            if (!context.HttpContext.Request.Headers.ContainsKey("Authorization"))
+                result = false;
+
+            var token = string.Empty;
+            if (result) { 
+                token = context.HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
+            }*/
             //get JWT token
             var handler = new JwtSecurityTokenHandler();
             JwtSecurityToken decodedValue = handler.ReadJwtToken(tokenid);
