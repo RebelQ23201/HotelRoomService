@@ -24,6 +24,8 @@ namespace CleanService.Service
                         .Include(o => o.RoomOrders).ThenInclude(ro=>ro.Room)
                         .Include(o => o.RoomOrders).ThenInclude(ro=>ro.OrderDetails).ThenInclude(od=>od.Service)
                         .Include(o => o.RoomOrders).ThenInclude(ro=>ro.OrderDetails).ThenInclude(od=>od.Employee)
+                        .Include(o=>o.Company)
+                        .Include(o=>o.Hotel)
                         .ToArrayAsync();
                 }
                 else
@@ -57,7 +59,21 @@ namespace CleanService.Service
             try
             {
                 using CleanContext context = new CleanContext();
-                Order order = await context.Orders.FindAsync(id);
+                Order order;
+                if (isDeep.HasValue && isDeep.Value)
+                {
+                    order = await context.Orders
+                        .Include(o => o.RoomOrders).ThenInclude(ro => ro.Room)
+                        .Include(o => o.RoomOrders).ThenInclude(ro => ro.OrderDetails).ThenInclude(od => od.Service)
+                        .Include(o => o.RoomOrders).ThenInclude(ro => ro.OrderDetails).ThenInclude(od => od.Employee)
+                        .Include(o => o.Company)
+                        .Include(o => o.Hotel)
+                        .SingleOrDefaultAsync(o=>o.OrderId==id);
+                }
+                else
+                {
+                    order = await context.Orders.FindAsync(id);
+                }
                 return order;
             }
             catch (Exception e)
