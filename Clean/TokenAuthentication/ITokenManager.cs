@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Clean.TokenAuthentication
 {
     public interface ITokenManager
     {
         Task<bool> Authenticate(string email);
-        Token NewToken();
-        bool VerifyToken(string token);
+        string NewToken();
+        ClaimsPrincipal VerifyToken(string token);
+        string getEmailFromToken(string token);
     }
 }

@@ -23,13 +23,19 @@ namespace Clean.Filter
             if (result)
             {
                 token = context.HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
-                if (!tokenManager.VerifyToken(token))
+                try
+                {
+                    var claimPrinciple = tokenManager.VerifyToken(token);
+                } 
+                catch (Exception ex)
+                {
                     result = false;
+                    context.ModelState.AddModelError("Unauthorized", ex.ToString());
+                }
             }
 
             if (!result)
             {
-                context.ModelState.AddModelError("Unauthorized", "You are not authorized.");
                 context.Result = new UnauthorizedObjectResult(context.ModelState);
             }
         }

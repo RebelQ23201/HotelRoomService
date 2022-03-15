@@ -49,7 +49,7 @@ namespace Clean
                         .AllowAnyMethod();
             }));
 
-            var key = "This is my first Test Key";
+            /*var key = "This is my first Test Key";
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,7 +65,7 @@ namespace Clean
                     ValidateAudience = false,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key))
                 };
-            });
+            });*/
 
             services.AddSwaggerGen(c =>
             {

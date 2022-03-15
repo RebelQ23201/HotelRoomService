@@ -101,15 +101,7 @@ namespace Clean.Controllers
         [HttpGet()]
         public async Task<ActionResult<EmailAccountOutputModel>> GetEmail(
             [FromQuery] string tokenid)
-        {
-            /*var result = true;
-            if (!context.HttpContext.Request.Headers.ContainsKey("Authorization"))
-                result = false;
-
-            var token = string.Empty;
-            if (result) { 
-                token = context.HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
-            }*/
+        {   
             //get JWT token
             var handler = new JwtSecurityTokenHandler();
             JwtSecurityToken decodedValue = handler.ReadJwtToken(tokenid);
@@ -121,7 +113,7 @@ namespace Clean.Controllers
             //get each data from the json and get user email
             Dictionary<string?, object> sData = JsonSerializer.Deserialize<Dictionary<string?, object>>(json);
             string email = sData["email"].ToString();
-            
+
             //search email from database
             Account account = await service.GetEmail(email);
 
