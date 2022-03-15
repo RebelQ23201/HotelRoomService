@@ -146,6 +146,27 @@ namespace Clean.Controllers
 
             return NoContent();
         }
+        [HttpPut("Status/{id}")]
+        public async Task<IActionResult> PutStatus(int id, int companyId, int status)
+        {
+            Order order = await service.GetById(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            if (order.CompanyId != companyId)
+            {
+                return Unauthorized();
+            }
+            order.Status = status;
+
+            if (!await service.Update(order))
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
 
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
