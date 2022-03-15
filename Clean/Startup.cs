@@ -22,6 +22,8 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Newtonsoft.Json;
+using Clean.TokenAuthentication;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Clean
 {
@@ -47,7 +49,7 @@ namespace Clean
                         .AllowAnyMethod();
             }));
 
-            var key = "This is my first Test Key";
+            /*var key = "This is my first Test Key";
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -63,7 +65,7 @@ namespace Clean
                     ValidateAudience = false,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key))
                 };
-            });
+            });*/
 
             services.AddSwaggerGen(c =>
             {
@@ -102,6 +104,9 @@ namespace Clean
             services.AddSingleton(typeof(IRoomTypeService<RoomType>), typeof(RoomTypeService));
             services.AddSingleton(typeof(IServiceService<Service>), typeof(ServiceService));
             services.AddSingleton(typeof(ISystemRoomTypeService<SystemRoomType>), typeof(SystemRoomTypeService));
+            //services.AddSingleton(typeof(IAuthorizationFilter), typeof(IAuthorizationFilter));
+
+            services.AddSingleton<ITokenManager, TokenManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
