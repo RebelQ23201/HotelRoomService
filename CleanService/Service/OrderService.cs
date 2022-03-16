@@ -115,7 +115,7 @@ namespace CleanService.Service
                 {
                     return false;
                 }
-                
+                order.Status = c.Status;
                 context.Entry(order).State = EntityState.Modified;
                 context.SaveChanges();
                 return true;
