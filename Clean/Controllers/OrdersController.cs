@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Model.Input;
 using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
@@ -16,13 +17,21 @@ namespace Clean.Controllers
     [ApiController]
     public class OrdersController : Controller
     {
-        private readonly IBaseService<Order> service;
+        private readonly IOrderService<Order> service;
+        private readonly IRoomOrderService<RoomOrder> roomOrderService;
+        private readonly IOrderDetailService<OrderDetail> orderDetailService;
+        private readonly IServiceService<Service> serviceService;
+        private readonly IEmployeeService<Employee> employeeService;
         private readonly IMapper mappper;
 
         //public CompaniesController(IBaseService<Order> accountService, IMapper mappper)
-        public OrdersController(IBaseService<Order> service, IMapper mappper)
+        public OrdersController(IOrderService<Order> service, IRoomOrderService<RoomOrder> roomOrderService, IOrderDetailService<OrderDetail> orderDetailService, IServiceService<Service> serviceService, IEmployeeService<Employee> employeeService ,IMapper mappper)
         {
             this.service = service;
+            this.roomOrderService = roomOrderService;
+            this.orderDetailService = orderDetailService;
+            this.serviceService = serviceService;
+            this.employeeService = employeeService;
             this.mappper = mappper;
         }
 
@@ -169,6 +178,68 @@ namespace Clean.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("Booking")]
+        public async Task<ActionResult<OrderOutputModel>> PostOrderWithDetail(OrderInputModel order)
+        {
+            DateTime startDate = (DateTime)order.StartDate;
+            DateTime endDate = (DateTime)order.EndDate;
+
+            int totalDays = (endDate.Date - startDate.Date).Days + 1;
+
+            int id = await service.GetTotal();
+            Order modelOrder = new Order();
+            modelOrder.OrderId = id + 1;
+            modelOrder.Name = order.OrderName;
+            modelOrder.HotelId = order.HotelId;
+            modelOrder.CompanyId = order.CompanyId;
+            modelOrder.StartDate = order.StartDate;
+            modelOrder.EndDate = order.EndDate;
+            modelOrder.Status = 0;
+            if (!await service.Create(modelOrder))
+            {
+                return NotFound();
+            }
+
+            
+
+            foreach (int roomId in order.roomList)
+            {
+                int roomOrderId = await roomOrderService.GetTotal();
+                RoomOrder roomOrder = new RoomOrder();
+                roomOrder.RoomOrderId = roomOrderId + 1;
+                roomOrder.RoomId = roomId;
+                roomOrder.OrderId = modelOrder.OrderId;
+                if (!await roomOrderService.Create(roomOrder))
+                {
+                    return NotFound();
+                }
+                foreach (int serviceId in order.serviceList)
+                {
+                    int orderDetailId = await orderDetailService.GetTotal();
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.OrderDetailId = orderDetailId + 1;
+                    orderDetail.RoomOrderId = roomOrder.RoomOrderId;
+                    
+                    orderDetail.ServiceId = serviceId;
+                    Service service = await serviceService.GetById(serviceId);
+                    orderDetail.Price = service.Price;
+                    orderDetail.Quantity = totalDays;
+
+                    Random random = new Random();
+                    List<Employee> list = (await employeeService.GetEmployeeByCompanyId((int)order.CompanyId)).ToList();
+                    int randomEmployee = random.Next(0, list.Count());
+
+                    orderDetail.EmployeeId = list[randomEmployee].EmployeeId;
+                    if (!await orderDetailService.Create(orderDetail))
+                    {
+                        return NotFound();
+                    }
+                }
+            }
+            return CreatedAtAction(nameof(GetOrders), new { id = id + 1 }, modelOrder);
         }
     }
 }

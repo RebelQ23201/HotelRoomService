@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanService.Service
 {
-    public class OrderDetailService : IBaseService<OrderDetail>
+    public class OrderDetailService : IOrderDetailService<OrderDetail>
     {
         public async Task<IEnumerable<OrderDetail>> GetList(Expression<Func<OrderDetail, bool>> query, bool? isDeep)
         {
@@ -119,6 +119,14 @@ namespace CleanService.Service
                 throw new Exception(e.Message);
             }
             return false;
+        }
+
+        public async Task<int> GetTotal()
+        {
+            using CleanContext context = new CleanContext();
+            IEnumerable<OrderDetail> list = await context.OrderDetails.ToListAsync();
+            int total = list.Count();
+            return total;
         }
     }
 }

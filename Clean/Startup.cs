@@ -95,11 +95,11 @@ namespace Clean
             services.AddSingleton(typeof(IEmployeeService<Employee>), typeof(EmployeeService));
             services.AddSingleton(typeof(IBaseService<HotelMember>), typeof(HotelMemberService));
             services.AddSingleton(typeof(IHotelService<Hotel>), typeof(HotelService));
-            services.AddSingleton(typeof(IBaseService<OrderDetail>), typeof(OrderDetailService));
-            services.AddSingleton(typeof(IBaseService<Order>), typeof(OrderService));
+            services.AddSingleton(typeof(IOrderDetailService<OrderDetail>), typeof(OrderDetailService));
+            services.AddSingleton(typeof(IOrderService<Order>), typeof(OrderService));
             services.AddSingleton(typeof(IBaseService<Role>), typeof(RoleService));
             services.AddSingleton(typeof(IRoomService<Room>), typeof(RoomManagementService));
-            services.AddSingleton(typeof(IBaseService<RoomOrder>), typeof(RoomOrderService));
+            services.AddSingleton(typeof(IRoomOrderService<RoomOrder>), typeof(RoomOrderService));
             services.AddSingleton(typeof(IBaseService<RoomService>), typeof(RoomServiceService));
             services.AddSingleton(typeof(IRoomTypeService<RoomType>), typeof(RoomTypeService));
             services.AddSingleton(typeof(IServiceService<Service>), typeof(ServiceService));
