@@ -15,9 +15,9 @@ namespace Clean.Controllers
     {
         private readonly IHotelService<Hotel> HotelService;
         private readonly ICompanyService<Company> CompanyService;
-        private readonly IBaseService<Order> OrderService;
+        private readonly IOrderService<Order> OrderService;
 
-        public DashboardController(IHotelService<Hotel> hotelService, ICompanyService<Company> companyService, IBaseService<Order> orderService)
+        public DashboardController(IHotelService<Hotel> hotelService, ICompanyService<Company> companyService, IOrderService<Order> orderService)
         {
             HotelService = hotelService;
             CompanyService = companyService;
