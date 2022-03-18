@@ -52,7 +52,7 @@ namespace Clean.Controllers
             }
             if (CompanyId != null)
             {
-                filters = filters.AndAlso(c => c.OrderId == CompanyId);
+                filters = filters.AndAlso(c => c.CompanyId == CompanyId);
             }
             if (!String.IsNullOrWhiteSpace(Name))
             {
