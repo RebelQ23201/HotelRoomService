@@ -9,5 +9,6 @@ namespace CleanService.IService
     public interface ICompanyService<T> : IBaseService<T>
     {
         public Task<T> GetEmail(string email);
+        public Task<int> GetTotal();
     }
 }

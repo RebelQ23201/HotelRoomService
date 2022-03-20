@@ -13,6 +13,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Text.Json;
 using Clean.Filter;
+using Clean.Model.Input;
 
 namespace Clean.Controllers
 {
@@ -159,6 +160,49 @@ namespace Clean.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("Register")]
+        public async Task<ActionResult<AccountOutputModel>> Register(RegisterInputModel registerInput)
+        {
+            Account account = new Account();
+            account.Email = registerInput.Email;
+            account.RoleId = registerInput.RoleId;
+            if (!await service.Create(account))
+            {
+                return NotFound();
+            }
+
+            if (registerInput.RoleId == 2)
+            {
+                int companyId = await CompanyService.GetTotal();
+                Company company = new Company();
+                company.CompanyId = companyId + 1;
+                company.Email = registerInput.Email;
+                company.Address = registerInput.Address;
+                company.Name = registerInput.Name;
+                company.Phone = registerInput.Phone;
+                if (!await CompanyService.Create(company))
+                {
+                    return NotFound();
+                }
+            }
+            if (registerInput.RoleId == 3)
+            {
+                int hotelId = await HotelService.GetTotal();
+                Hotel hotel = new Hotel();
+                hotel.HotelId = hotelId + 1;
+                hotel.Email = registerInput.Email;
+                hotel.Address = registerInput.Address;
+                hotel.Name = registerInput.Name;
+                hotel.Phone = registerInput.Phone;
+                if (!await HotelService.Create(hotel))
+                {
+                    return NotFound();
+                }
+            }
+            return CreatedAtAction(nameof(GetAccounts), new { id = account.AccountId }, account);
         }
     }
 }

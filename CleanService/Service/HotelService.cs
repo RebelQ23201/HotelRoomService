@@ -172,5 +172,13 @@ namespace CleanService.Service
             }
             return null;
         }
+
+        public async Task<int> GetTotal()
+        {
+            using CleanContext context = new CleanContext();
+            IEnumerable<Hotel> list = await context.Hotels.ToListAsync();
+            int total = list.Count();
+            return total;
+        }
     }
 }

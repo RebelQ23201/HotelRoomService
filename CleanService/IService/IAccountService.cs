@@ -12,5 +12,6 @@ namespace CleanService.IService
         public Task<T> GetEmail(string email);
 
         public Task<bool> CreateViaSignIn(string email);
+        public Task<int> GetTotal();
     }
 }

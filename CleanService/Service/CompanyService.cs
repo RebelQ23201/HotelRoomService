@@ -174,5 +174,13 @@ namespace CleanService.Service
             }
             return null;
         }
+
+        public async Task<int> GetTotal()
+        {
+            using CleanContext context = new CleanContext();
+            IEnumerable<Company> list = await context.Companies.ToListAsync();
+            int total = list.Count();
+            return total;
+        }
     }
 }
