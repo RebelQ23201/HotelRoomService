@@ -87,14 +87,14 @@ namespace Clean.Controllers
         {
             int id = await service.GetTotal();
             SystemRoomType roomtype = new SystemRoomType();
-            roomtype.SystemRoomTypeId = id++;
+            roomtype.SystemRoomTypeId = id + 1;
             roomtype.Name = model.Name;
 
             if (!await service.Create(roomtype))
             {
                 return NotFound();
             }
-            return CreatedAtAction(nameof(GetSystemRoomTypes), new { id = id }, roomtype);
+            return CreatedAtAction(nameof(GetSystemRoomTypes), new { id = id + 1 }, roomtype);
         }
 
         // DELETE: api/TodoItems/5
