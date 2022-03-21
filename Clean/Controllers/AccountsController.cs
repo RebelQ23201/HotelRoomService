@@ -166,6 +166,12 @@ namespace Clean.Controllers
         [Route("Register")]
         public async Task<ActionResult<AccountOutputModel>> Register(RegisterInputModel registerInput)
         {
+            Account checkAccount = await service.GetEmail(registerInput.Email);
+            if (checkAccount != null)
+            {
+                return BadRequest();
+            }
+
             Account account = new Account();
             account.Email = registerInput.Email;
             account.RoleId = registerInput.RoleId;
