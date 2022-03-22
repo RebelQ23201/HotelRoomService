@@ -117,8 +117,8 @@ namespace Clean.Controllers
             {
                 filters = filters.AndAlso(c => c.Status == Status);
             }
-           var accounts = (await service.GetList(filters, detailed));
-            List<int> models = accounts.Select(a=>a.OrderId).ToList();
+           var orders = (await service.GetList(filters, detailed));
+            List<int> models = orders.Select(a=>a.OrderId).ToList();
             return models;
         }
 
@@ -126,14 +126,32 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderOutputModel>> GetOrder(int id, bool? detailed =true)
         {
-            Order account = await service.GetById(id, detailed);
+            Order order = await service.GetById(id, detailed);
 
-            if (account == null)
+            if (order == null)
             {
                 return NotFound();
             }
 
-            OrderOutputModel model = mappper.Map<OrderOutputModel>(account);
+            OrderOutputModel model = mappper.Map<OrderOutputModel>(order);
+
+            return model;
+        }
+
+        [HttpGet("Total/{orderId}")]
+        public async Task<ActionResult<TotalOrderMoneyOutput>> GetTotalMoney(int orderId)
+        {
+            Order order = await service.GetById(orderId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            double total = await service.GetTotalMoney(orderId);
+            TotalOrderMoneyOutput model = new TotalOrderMoneyOutput();
+            model.orderId = orderId;
+            model.total = total;
 
             return model;
         }
@@ -141,14 +159,14 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(int id, Order account)
+        public async Task<IActionResult> PutOrder(int id, Order order)
         {
-            if (id != account.OrderId)
+            if (id != order.OrderId)
             {
                 return BadRequest();
             }
 
-            if (!await service.Update(account))
+            if (!await service.Update(order))
             {
                 return NotFound();
             }

@@ -33,7 +33,7 @@ namespace Clean.Controllers
             Expression<Func<RoomService, bool>> filters = c => true;
             if (id != null)
             {
-                filters = filters.AndAlso(c => c.RoomServiceId == id);
+                filters = filters.AndAlso(c => c.ServiceId == id);
             }
 
             List<RoomService> accounts = (await service.GetList(filters)).ToList();
@@ -62,7 +62,7 @@ namespace Clean.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoomService(int id, RoomService account)
         {
-            if (id != account.RoomServiceId)
+            if (id != account.ServiceId)
             {
                 return BadRequest();
             }
@@ -84,7 +84,7 @@ namespace Clean.Controllers
             {
                 return NotFound();
             }
-            return CreatedAtAction(nameof(GetRoomServices), new { id = account.RoomServiceId }, account);
+            return CreatedAtAction(nameof(GetRoomServices), new { id = account.ServiceId }, account);
         }
 
         // DELETE: api/TodoItems/5

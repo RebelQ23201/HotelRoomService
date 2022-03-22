@@ -46,14 +46,14 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeOutputModel>> GetEmployee(int id, bool? detailed =true)
         {
-            Employee account = await service.GetById(id, detailed);
+            Employee employee = await service.GetById(id, detailed);
 
-            if (account == null)
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            EmployeeOutputModel model = mappper.Map<EmployeeOutputModel>(account);
+            EmployeeOutputModel model = mappper.Map<EmployeeOutputModel>(employee);
 
             return model;
         }
@@ -61,14 +61,14 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(int id, Employee account)
+        public async Task<IActionResult> PutEmployee(int id, Employee employee)
         {
-            if (id != account.EmployeeId)
+            if (id != employee.EmployeeId)
             {
                 return BadRequest();
             }
 
-            if (!await service.Update(account))
+            if (!await service.Update(employee))
             {
                 return NotFound();
             }

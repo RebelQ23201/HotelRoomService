@@ -38,8 +38,8 @@ namespace Clean.Controllers
                     filters = filters.AndAlso(c => c.HotelId == id);
                 }
 
-                List<Hotel> accounts = (await service.GetList(filters, detailed)).ToList();
-                List<HotelOutputModel> models = mappper.Map<List<HotelOutputModel>>(accounts);
+                List<Hotel> hotels = (await service.GetList(filters, detailed)).ToList();
+                List<HotelOutputModel> models = mappper.Map<List<HotelOutputModel>>(hotels);
                 return models;
             }
 
@@ -87,13 +87,13 @@ namespace Clean.Controllers
             // POST: api/TodoItems
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPost]
-            public async Task<ActionResult<HotelOutputModel>> PostHotel(Hotel account)
+            public async Task<ActionResult<HotelOutputModel>> PostHotel(Hotel hotel)
             {
-                if (!await service.Create(account))
+                if (!await service.Create(hotel))
                 {
                     return NotFound();
                 }
-                return CreatedAtAction(nameof(GetHotels), new { id = account.HotelId }, account);
+                return CreatedAtAction(nameof(GetHotels), new { id = hotel.HotelId }, hotel);
             }
 
             // DELETE: api/TodoItems/5

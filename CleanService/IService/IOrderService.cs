@@ -9,5 +9,6 @@ namespace CleanService.IService
     public interface IOrderService<T>: IBaseService<T>
     {
         public Task<int> GetTotal();
+        public Task<double> GetTotalMoney(int orderId);
     }
 }

@@ -37,8 +37,8 @@ namespace Clean.Controllers
                 filters = filters.AndAlso(c => c.RoomId == id);
             }
 
-            List<Room> accounts = (await service.GetList(filters)).ToList();
-            List<RoomOutputModel> models = mappper.Map<List<RoomOutputModel>>(accounts);
+            List<Room> rooms = (await service.GetList(filters)).ToList();
+            List<RoomOutputModel> models = mappper.Map<List<RoomOutputModel>>(rooms);
             return models;
         }
 
@@ -46,14 +46,14 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RoomOutputModel>> GetRoom(int id)
         {
-            Room account = await service.GetById(id);
+            Room room = await service.GetById(id);
 
-            if (account == null)
+            if (room == null)
             {
                 return NotFound();
             }
 
-            RoomOutputModel model = mappper.Map<RoomOutputModel>(account);
+            RoomOutputModel model = mappper.Map<RoomOutputModel>(room);
 
             return model;
         }
@@ -61,14 +61,14 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom(int id, Room account)
+        public async Task<IActionResult> PutRoom(int id, Room room)
         {
-            if (id != account.RoomId)
+            if (id != room.RoomId)
             {
                 return BadRequest();
             }
 
-            if (!await service.Update(account))
+            if (!await service.Update(room))
             {
                 return NotFound();
             }

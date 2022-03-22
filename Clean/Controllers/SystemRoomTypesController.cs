@@ -37,8 +37,8 @@ namespace Clean.Controllers
                 filters = filters.AndAlso(c => c.SystemRoomTypeId == id);
             }
 
-            List<SystemRoomType> accounts = (await service.GetList(filters)).ToList();
-            List<SystemRoomTypeOutputModel> models = mappper.Map<List<SystemRoomTypeOutputModel>>(accounts);
+            List<SystemRoomType> systemRoomTypes = (await service.GetList(filters)).ToList();
+            List<SystemRoomTypeOutputModel> models = mappper.Map<List<SystemRoomTypeOutputModel>>(systemRoomTypes);
             return models;
         }
 
@@ -46,14 +46,14 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SystemRoomTypeOutputModel>> GetSystemRoomType(int id)
         {
-            SystemRoomType account = await service.GetById(id);
+            SystemRoomType systemRoomType = await service.GetById(id);
 
-            if (account == null)
+            if (systemRoomType == null)
             {
                 return NotFound();
             }
 
-            SystemRoomTypeOutputModel model = mappper.Map<SystemRoomTypeOutputModel>(account);
+            SystemRoomTypeOutputModel model = mappper.Map<SystemRoomTypeOutputModel>(systemRoomType);
 
             return model;
         }
@@ -61,16 +61,16 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSystemRoomType(int id, SystemRoomTypeInputModel account)
+        public async Task<IActionResult> PutSystemRoomType(int id, SystemRoomTypeInputModel systemRoomType)
         {
-            if (id != account.SystemRoomTypeId)
+            if (id != systemRoomType.SystemRoomTypeId)
             {
                 return BadRequest();
             }
 
             SystemRoomType roomtype = new SystemRoomType();
-            roomtype.SystemRoomTypeId = account.SystemRoomTypeId;
-            roomtype.Name = account.Name;
+            roomtype.SystemRoomTypeId = systemRoomType.SystemRoomTypeId;
+            roomtype.Name = systemRoomType.Name;
 
             if (!await service.Update(roomtype))
             {

@@ -37,8 +37,8 @@ namespace Clean.Controllers
                 filters = filters.AndAlso(c => c.ServiceId == id);
             }
 
-            List<Service> accounts = (await service.GetList(filters)).ToList();
-            List<ServiceOutputModel> models = mappper.Map<List<ServiceOutputModel>>(accounts);
+            List<Service> services = (await service.GetList(filters)).ToList();
+            List<ServiceOutputModel> models = mappper.Map<List<ServiceOutputModel>>(services);
             return models;
         }
 
@@ -46,14 +46,14 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceOutputModel>> GetService(int id)
         {
-            Service account = await service.GetById(id);
+            Service services = await service.GetById(id);
 
-            if (account == null)
+            if (services == null)
             {
                 return NotFound();
             }
 
-            ServiceOutputModel model = mappper.Map<ServiceOutputModel>(account);
+            ServiceOutputModel model = mappper.Map<ServiceOutputModel>(services);
 
             return model;
         }
@@ -129,14 +129,14 @@ namespace Clean.Controllers
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<ServiceOutputModel>>> GetServiceByCompanyId(int id)
         {
-            IEnumerable<Service> accounts = await service.GetServiceByCompanyId(id);
+            IEnumerable<Service> services = await service.GetServiceByCompanyId(id);
 
-            if (accounts == null)
+            if (services == null)
             {
                 return NotFound();
             }
 
-            List<ServiceOutputModel> models = mappper.Map<List<ServiceOutputModel>>(accounts);
+            List<ServiceOutputModel> models = mappper.Map<List<ServiceOutputModel>>(services);
             //ServiceOutputModel model = mappper.Map<ServiceOutputModel>(account);
 
             return models;

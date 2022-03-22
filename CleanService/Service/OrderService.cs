@@ -157,5 +157,21 @@ namespace CleanService.Service
             int total = list.Count();
             return total;
         }
+
+        public async Task<double> GetTotalMoney(int orderId)
+        {
+            double totalMoney = 0;
+            using CleanContext context = new CleanContext();
+            List<RoomOrder> listRoomOrder = await context.RoomOrders.Where(ro => ro.OrderId == orderId).ToListAsync();
+            foreach (RoomOrder roomOrder in listRoomOrder)
+            {
+                List<OrderDetail> list = await context.OrderDetails.Where(od => od.RoomOrderId == roomOrder.RoomOrderId).ToListAsync();
+                foreach (OrderDetail orderDetail in list)
+                {
+                    totalMoney = totalMoney + (orderDetail.Price.Value * orderDetail.Quantity.Value);
+                }
+            }
+            return totalMoney;
+        }
     }
 }

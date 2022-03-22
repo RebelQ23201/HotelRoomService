@@ -16,11 +16,11 @@ namespace Clean.Controllers
     [ApiController]
     public class RoomOrdersController : Controller
     {
-        private readonly IBaseService<RoomOrder> service;
+        private readonly IRoomOrderService<RoomOrder> service;
         private readonly IMapper mappper;
 
         //public CompaniesController(IBaseService<RoomOrder> accountService, IMapper mappper)
-        public RoomOrdersController(IBaseService<RoomOrder> service, IMapper mappper)
+        public RoomOrdersController(IRoomOrderService<RoomOrder> service, IMapper mappper)
         {
             this.service = service;
             this.mappper = mappper;
@@ -36,8 +36,8 @@ namespace Clean.Controllers
                 filters = filters.AndAlso(c => c.RoomOrderId == id);
             }
 
-            List<RoomOrder> accounts = (await service.GetList(filters)).ToList();
-            List<RoomOrderOutputModel> models = mappper.Map<List<RoomOrderOutputModel>>(accounts);
+            List<RoomOrder> roomOrders = (await service.GetList(filters)).ToList();
+            List<RoomOrderOutputModel> models = mappper.Map<List<RoomOrderOutputModel>>(roomOrders);
             return models;
         }
 
@@ -45,14 +45,14 @@ namespace Clean.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RoomOrderOutputModel>> GetRoomOrder(int id)
         {
-            RoomOrder account = await service.GetById(id);
+            RoomOrder roomOrder = await service.GetById(id);
 
-            if (account == null)
+            if (roomOrder == null)
             {
                 return NotFound();
             }
 
-            RoomOrderOutputModel model = mappper.Map<RoomOrderOutputModel>(account);
+            RoomOrderOutputModel model = mappper.Map<RoomOrderOutputModel>(roomOrder);
 
             return model;
         }
@@ -78,13 +78,13 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<RoomOrderOutputModel>> PostRoomOrder(RoomOrder account)
+        public async Task<ActionResult<RoomOrderOutputModel>> PostRoomOrder(RoomOrder roomOrder)
         {
-            if (!await service.Create(account))
+            if (!await service.Create(roomOrder))
             {
                 return NotFound();
             }
-            return CreatedAtAction(nameof(GetRoomOrders), new { id = account.RoomOrderId }, account);
+            return CreatedAtAction(nameof(GetRoomOrders), new { id = roomOrder.RoomOrderId }, roomOrder);
         }
 
         // DELETE: api/TodoItems/5
