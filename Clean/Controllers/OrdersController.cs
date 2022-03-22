@@ -177,6 +177,28 @@ namespace Clean.Controllers
             return Ok("update successfully");
         }
 
+        [HttpPut("StatusCancel/{id}")]
+        public async Task<IActionResult> PutStatusCancel(int id, int hotelId)
+        {
+            Order order = await service.GetById(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            if (order.HotelId != hotelId)
+            {
+                return Unauthorized();
+            }
+            order.Status = 2;
+
+            if (!await service.Update(order))
+            {
+                return NotFound();
+            }
+
+            return Ok("cancel successfully");
+        }
+
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
