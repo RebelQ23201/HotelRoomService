@@ -54,6 +54,7 @@ namespace Clean.Controllers
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
+        [TokenAuthenticationFilter]
         public async Task<ActionResult<AccountOutputModel>> GetAccount(int id, bool? detailed = true)
         {
             Account account = await service.GetById(id, detailed);
@@ -71,6 +72,7 @@ namespace Clean.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [TokenAuthenticationFilter]
         public async Task<IActionResult> PutAccount(int id, Account account)
         {
             if (id != account.AccountId)
@@ -89,6 +91,7 @@ namespace Clean.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [TokenAuthenticationFilter]
         public async Task<ActionResult<AccountOutputModel>> PostAccount(Account account)
         {
             if (!await service.Create(account))
@@ -152,6 +155,7 @@ namespace Clean.Controllers
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
+        [TokenAuthenticationFilter]
         public async Task<IActionResult> DeleteTodoItem(int id)
         {
             if (!await service.Delete(id))

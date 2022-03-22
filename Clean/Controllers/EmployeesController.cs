@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Filter;
 using Clean.Model.Input;
 using Clean.Model.Output;
 using Clean.Util;
@@ -15,6 +16,7 @@ namespace Clean.Controllers
 {
     [Route("api/Employee")]
     [ApiController]
+    [TokenAuthenticationFilter]
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService<Employee> service;

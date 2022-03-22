@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Filter;
 using Clean.Model.Input;
 using Clean.Model.Output;
 using Clean.Util;
@@ -15,6 +16,7 @@ namespace Clean.Controllers
 {
     [Route("api/SystemRoomType")]
     [ApiController]
+    [TokenAuthenticationFilter]
     public class SystemRoomTypesController : Controller
     {
         private readonly ISystemRoomTypeService<SystemRoomType> service;

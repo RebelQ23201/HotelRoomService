@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Filter;
 using Clean.Model.Input;
 using Clean.Model.Output;
 using Clean.Util;
@@ -16,8 +17,9 @@ namespace Clean.Controllers
     
         [Route("api/Hotel")]
         [ApiController]
+        [TokenAuthenticationFilter]
         public class HotelsController : Controller
-        {
+            {
             private readonly IHotelService<Hotel> service;
             private readonly IMapper mappper;
 

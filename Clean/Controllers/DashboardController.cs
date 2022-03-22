@@ -1,4 +1,5 @@
-﻿using CleanService.DBContext;
+﻿using Clean.Filter;
+using CleanService.DBContext;
 using CleanService.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace Clean.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [TokenAuthenticationFilter]
     public class DashboardController : ControllerBase
     {
         private readonly IHotelService<Hotel> HotelService;

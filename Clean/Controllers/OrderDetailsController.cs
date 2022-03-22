@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Filter;
 using Clean.Model.Output;
 using Clean.Util;
 using CleanService.DBContext;
@@ -14,6 +15,7 @@ namespace Clean.Controllers
 {
     [Route("api/OrderDetail")]
     [ApiController]
+    [TokenAuthenticationFilter]
     public class OrderDetailsController : Controller
     {
         private readonly IOrderDetailService<OrderDetail> service;

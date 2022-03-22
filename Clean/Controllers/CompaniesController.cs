@@ -13,11 +13,13 @@ using CleanService.DBContext;
 using System.Linq.Expressions;
 using Clean.Util;
 using Clean.Model.Input;
+using Clean.Filter;
 
 namespace Clean.Controllers
 {
     [Route("api/Company")]
     [ApiController]
+    [TokenAuthenticationFilter]
     public class CompaniesController : Controller
     {
         private readonly ICompanyService<Company> service;
